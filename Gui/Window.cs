@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using Colorister;
 
 namespace Gui;
@@ -7,8 +8,6 @@ using  Raylib_cs;
 public class Window {
     private int width, height;
     private int fps;
-    private int borderWidth;
-    private Color clearColor;
 
     private string title;
 
@@ -19,78 +18,95 @@ public class Window {
         int height,
         int fps,
         string title,
-        Color? clearColor = null
+        Pane rootPane
     ) {
-        Color realClearColor = Color.White;
-        if (clearColor != null) {
-            realClearColor = this.clearColor;
+
+        if (rootPane == null) {
+            throw new Exception();
         }
-        
-        this.borderWidth = (width + height) / 200;
+
+        this.rootPane = rootPane;
 
         this.width = width;
         this.height = height;
         this.fps = fps;
-        this.clearColor = realClearColor;
         this.title = title;
 
+        SetCorrectRootCoordinateVariables();
+        SetCorrectThemeVariables();
+        
+        this.OpenGuiWindow();
+    }
+
+    void SetCorrectThemeVariables() {
+        AppTheme.Instance.SetBorderSize((width + height) / 200);
+        AppTheme.Instance.SetFontSize(CalculateRightFontSize());
+    }
+
+    void SetCorrectRootCoordinateVariables() {
         this.rootPane.SetNewCoordinateVariables(
-            this.borderWidth,
-            this.borderWidth,
-            this.width - 2 * borderWidth,
-            this.height - 2 * borderWidth,
-            this.borderWidth
+            AppTheme.Instance.BorderSize,
+            AppTheme.Instance.BorderSize,
+            this.width - 2 * AppTheme.Instance.BorderSize,
+            this.height - 2 * AppTheme.Instance.BorderSize
         );
     }
 
+    int CalculateRightFontSize() {
+        int startSize = ((width + height) / 100);
+
+        int i = 20;
+        while (i < startSize) {
+            i *= 2;
+        }
+
+        return i;
+    }
+
+    ~Window() {
+        Raylib.CloseWindow();
+    }
     
     void OpenGuiWindow() {
-        Raylib.SetConfigFlags(ConfigFlags.HighDpiWindow);
+        Raylib.SetConfigFlags(
+            ConfigFlags.HighDpiWindow |
+            ConfigFlags.ResizableWindow
+        );
         Raylib.InitWindow(
             this.width,
             this.height,
             this.title
         );
-        // Raylib.DisableBackfaceCulling();
-
-        Raylib.SetTargetFPS((int)fps);
+        Rlgl.DisableBackfaceCulling();
+        Raylib.SetTargetFPS(fps);
     }
     
     public void DrawProgram() {
         Raylib.BeginDrawing();
-        Raylib.ClearBackground(this.clearColor);
+        Raylib.ClearBackground(AppTheme.Instance.Theme.backgroundColor);
         this.rootPane.Draw();
         Raylib.EndDrawing();
     }
 
     public void UpdatePanesToNewSizes() {
+
+        this.SetCorrectRootCoordinateVariables();
         this.rootPane.ResetCoordinateVariables();
     }
 
-    public Window(
-        int i
-    ) {
-        Raylib.InitWindow(800, 480, "Hello World");
-
-        while (!Raylib.WindowShouldClose())
-        {
-            Raylib.BeginDrawing();
-            Raylib.ClearBackground(Color.White);
-
-            Rectangle rect = new Rectangle(10.0f, 10.0f, 50.0f, 50.0f);
-            Rectangle rect2 = new Rectangle(70.0f, 70.0f, (float)(200.0f+Math.Sin(Raylib.GetTime())*150.0f), 100.0f);
-            GuiFunctions.DrawBox(rect);
-                
-            GuiFunctions.DrawNamedBox(
-                rect2,
-                "uszanowanko z podełeczka"
-            );
-
-            Raylib.DrawText("Hello, wo!", 12, 12, 20, Color.Black);
-
-            Raylib.EndDrawing();
+    public void Loop() {
+        while (!Raylib.WindowShouldClose()) {
+            MouseState.Instance.UpdateMouseState();
+            if (Raylib.IsWindowResized()) {
+                this.width = Raylib.GetScreenWidth();
+                this.height = Raylib.GetScreenHeight();
+                UpdatePanesToNewSizes();
+                SetCorrectThemeVariables();
+            }
+            
+            rootPane.UpdatePerctentForChildCanvas(40 + Convert.ToInt32(20 * Math.Sin(Raylib.GetTime())));
+            UpdatePanesToNewSizes();
+            this.DrawProgram();
         }
-
-        Raylib.CloseWindow();
     }
 }
