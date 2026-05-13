@@ -7,10 +7,10 @@ namespace Gui;
 using  Raylib_cs;
 
 public class Window {
-    private int width, height;
-    private int fps;
+    public int width, height;
+    public int fps;
 
-    private string title;
+    public string title;
 
     private Pane rootPane;
     

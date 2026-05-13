@@ -5,7 +5,17 @@ namespace Gui;
 
 public class NamedBoxObject : UiObject {
     string text;
-    IntRect canvasCoordinates;
+
+    IntRect canvasCoordinates {
+        get {
+            return new IntRect(
+                base.coordinates.x + AppTheme.Instance.BorderSize,
+                base.coordinates.y + AppTheme.Instance.BorderSize,
+                base.coordinates.width - 2 * AppTheme.Instance.BorderSize,
+                base.coordinates.height - 2 * AppTheme.Instance.BorderSize
+            );
+        }
+    }
     
     UiObject? guiObject;
 
@@ -26,25 +36,30 @@ public class NamedBoxObject : UiObject {
     ) : this() {
         this.text = text;
     }
-
+    
     public NamedBoxObject(
         string text,
         UiObject guiObject
     ) : base() {
         this.text = text;
-        this.guiObject = guiObject;
-        this.canvasCoordinates = new IntRect(
-            this.coordinates.x + AppTheme.Instance.BorderSize,
-            this.coordinates.y + AppTheme.Instance.BorderSize,
-            this.coordinates.width - 2 * AppTheme.Instance.BorderSize,
-            this.coordinates.height - 2 * AppTheme.Instance.BorderSize
+        this.AddGuiObject(
+            guiObject
         );
-        this.guiObject.Resize(
-            this.canvasCoordinates.x,
-            this.canvasCoordinates.y,
-            this.canvasCoordinates.width,
-            this.canvasCoordinates.height
-        );
+    }
+
+    public void AddGuiObject(
+        UiObject uiObject
+    ) {
+        this.guiObject = uiObject;
+        if (this.guiObject != null) {
+            
+            this.guiObject.Resize(
+                this.canvasCoordinates.x,
+                this.canvasCoordinates.y,
+                this.canvasCoordinates.width,
+                this.canvasCoordinates.height
+            );
+        }
     }
 
     public override void Resize(

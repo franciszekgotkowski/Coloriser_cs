@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace Gui;
 
 using Raylib_cs;
@@ -40,4 +42,12 @@ public class IntRect {
     public override string ToString() {
         return $"X: {this.x}, Y: {this.y}, Width: {this.width}, Height: {this.height}";
     }
+
+    public static explicit operator Rectangle(IntRect intRect) => new Rectangle(
+        (float)intRect.x,
+        (float)intRect.y,
+        (float)intRect.width,
+        (float)intRect.height
+    );
+
 }

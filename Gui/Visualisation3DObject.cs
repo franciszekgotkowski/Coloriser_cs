@@ -4,50 +4,53 @@ using Raylib_cs;
 namespace Gui;
 
 public class Visualisation3DObject : UiObject {
-    private Vector3 defaultCameraLocation = new Vector3(2.0f, 1.0f, 1.0f);
-    private float defaultCameraFov = 45.0f;
-    private Camera3D camera;
+    public Camera camera;
+    public RenderTexture renderTexture;
     
-    private RenderTexture2D? renderTexture;
-    private float cubeSize = 1.0f;
-
     public Visualisation3DObject(
+        int width = 0,
+        int height = 0
     ) : base() {
-        this.camera = new Camera3D(
-            defaultCameraLocation,
-            new Vector3(0.0f),
-            new Vector3(0.0f, 1.0f, 0.0f),
-            defaultCameraFov,
-            CameraProjection.Perspective
-        );
-
-        this.renderTexture = Raylib.LoadRenderTexture(
-            base.coordinates.width,
-            base.coordinates.height
+        this.camera = new Camera();
+        this.renderTexture = new RenderTexture(
+            width,
+            height
         );
     }
 
-    ~Visualisation3DObject() {
-        Raylib.UnloadRenderTexture(
-            this.renderTexture.Value
-        );
-    }
-
-    void UpdateRenderTexture() {
+    public override void Resize(
+        int xPos, 
+        int yPos, 
+        int width, 
+        int height
+    )  {
+        base.Resize(xPos, yPos, width, height);
         if (this.renderTexture != null) {
-            Raylib.UnloadRenderTexture(
-                this.renderTexture.Value
-            );
-            this.renderTexture = null;
+            this.renderTexture.Resize(width, height);
         }
-
-        this.renderTexture = Raylib.LoadRenderTexture(
-            base.coordinates.width,
-            base.coordinates.height
-        );
     }
-    
+
     public override void Draw() {
-        throw new NotImplementedException();
+        renderTexture.Activate();
+        // Raylib.ClearBackground(AppTheme.Instance.Theme.backgroundColor);
+        Raylib.ClearBackground(Color.RayWhite);
+        Raylib.BeginMode3D(this.camera.camera);
+        
+        Raylib.EndMode3D();
+        renderTexture.Deactivate();
+        Raylib.DrawTextureRec(
+            this.renderTexture.renderTexture.Texture,
+            new Rectangle(
+                0.0f,
+                0.0f,
+                this.renderTexture.width,
+                this.renderTexture.height
+            ),
+            new Vector2(
+                base.coordinates.x,
+                base.coordinates.y
+            ),
+            Color.White
+        );
     }
 }
