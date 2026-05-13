@@ -1,3 +1,4 @@
+using System.Drawing;
 using System.Runtime.InteropServices;
 using Colorister;
 
@@ -89,7 +90,6 @@ public class Window {
     }
 
     public void UpdatePanesToNewSizes() {
-
         this.SetCorrectRootCoordinateVariables();
         this.rootPane.ResetCoordinateVariables();
     }
@@ -102,6 +102,14 @@ public class Window {
                 this.height = Raylib.GetScreenHeight();
                 UpdatePanesToNewSizes();
                 SetCorrectThemeVariables();
+            }
+
+            if (Raylib.IsKeyPressed(KeyboardKey.K)) {
+                if (AppTheme.Instance.Theme == ColorTheme.Kanagawa) {
+                    AppTheme.Instance.SetTheme(ColorTheme.LightBlue);
+                } else {
+                    AppTheme.Instance.SetTheme(ColorTheme.Kanagawa);
+                }
             }
             
             rootPane.UpdatePerctentForChildCanvas(40 + Convert.ToInt32(20 * Math.Sin(Raylib.GetTime())));
