@@ -46,6 +46,14 @@ public class RenderTexture {
         int widht,
         int height
     ) {
+
+        if (
+            this.width == widht &&
+            this.height == height
+        ) {
+            return;
+        }
+        
         this.width = widht;
         this.height = height;
         bool active = false;

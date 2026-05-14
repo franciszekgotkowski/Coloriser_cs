@@ -84,8 +84,10 @@ public class Window {
     
     public void DrawProgram() {
         Raylib.BeginDrawing();
+        
         Raylib.ClearBackground(AppTheme.Instance.Theme.backgroundColor);
         this.rootPane.Draw();
+        
         Raylib.EndDrawing();
     }
 
@@ -94,16 +96,20 @@ public class Window {
         this.rootPane.ResetCoordinateVariables();
     }
 
+    void HandleWindowResizing() {
+        if (Raylib.IsWindowResized()) {
+            this.width = Raylib.GetScreenWidth();
+            this.height = Raylib.GetScreenHeight();
+            UpdatePanesToNewSizes();
+            SetCorrectThemeVariables();
+        }
+    }
+
     public void Loop() {
         while (!Raylib.WindowShouldClose()) {
+            HandleWindowResizing();
             MouseState.Instance.UpdateMouseState();
-            if (Raylib.IsWindowResized()) {
-                this.width = Raylib.GetScreenWidth();
-                this.height = Raylib.GetScreenHeight();
-                UpdatePanesToNewSizes();
-                SetCorrectThemeVariables();
-            }
-
+            
             if (Raylib.IsKeyPressed(KeyboardKey.K)) {
                 if (AppTheme.Instance.Theme == ColorTheme.Kanagawa) {
                     AppTheme.Instance.SetTheme(ColorTheme.LightBlue);
@@ -112,9 +118,9 @@ public class Window {
                 }
             }
             
-            rootPane.UpdatePerctentForChildCanvas(40 + Convert.ToInt32(20 * Math.Sin(Raylib.GetTime())));
+            // rootPane.UpdatePerctentForChildCanvas(40 + Convert.ToInt32(20 * Math.Sin(Raylib.GetTime())));
             UpdatePanesToNewSizes();
-            this.DrawProgram();
+            DrawProgram();
         }
     }
 }

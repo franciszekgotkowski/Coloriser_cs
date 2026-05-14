@@ -6,6 +6,7 @@ namespace Gui;
 public class Visualisation3DObject : UiObject {
     public Camera camera;
     public RenderTexture renderTexture;
+    public Scene3D scene;
     
     public Visualisation3DObject(
         int width = 0,
@@ -16,6 +17,13 @@ public class Visualisation3DObject : UiObject {
             width,
             height
         );
+    }
+
+    public Visualisation3DObject(
+        Scene3D scene
+    ) : this (0, 0) {
+        this.scene = scene;
+        this.scene.camera = this.camera;
     }
 
     public override void Resize(
@@ -32,11 +40,19 @@ public class Visualisation3DObject : UiObject {
 
     public override void Draw() {
         renderTexture.Activate();
-        // Raylib.ClearBackground(AppTheme.Instance.Theme.backgroundColor);
-        Raylib.ClearBackground(Color.RayWhite);
-        Raylib.BeginMode3D(this.camera.camera);
+        Raylib.ClearBackground(AppTheme.Instance.Theme.backgroundColor);
+
+        this.camera.position = new Vector3(
+            2.0f * (float)Math.Sin(Raylib.GetTime()),
+            this.camera.position.Y,
+            2.0f * (float)Math.Cos(Raylib.GetTime())
+        );
+
+        if (this.scene != null) {
+            this.scene.Update();
+            this.scene.Draw();
+        }
         
-        Raylib.EndMode3D();
         renderTexture.Deactivate();
         Raylib.DrawTextureRec(
             this.renderTexture.renderTexture.Texture,

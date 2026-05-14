@@ -46,7 +46,7 @@ public static class UserInterface {
         );
     }
     
-
+    
     public static void DrawNamedBox(
         IntRect rect,
         string txt
@@ -93,8 +93,8 @@ public static class UserInterface {
             AppTheme.Instance.Theme.borderColor
             );
         }
-
-
+    
+    
         if (rect.width - (textOffset + textWidth + 2 * textBorder) > 0) {
             Raylib.DrawLine(
                 (rect.x + rect.width),
@@ -119,4 +119,6 @@ public static class UserInterface {
             AppTheme.Instance.Theme.textColor
             );
     }
+
+
 }

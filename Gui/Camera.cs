@@ -40,7 +40,7 @@ public class Camera {
     }
     public Camera(
     ) : this (
-        new Vector3(0.0f, 0.0f, 0.0f),
-        new Vector3(2.0f, 1.0f, 2.0f)
+        new Vector3(2.0f, 1.0f, 2.0f),
+        new Vector3(0.0f, 0.0f, 0.0f)
     ) { }
 }
