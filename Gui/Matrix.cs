@@ -70,7 +70,7 @@ public class Matrix {
         if (
             data.Count != matrix.data.Count &&
             data[0].Count != matrix.data[0].Count
-            ) {
+        ) {
             throw new Exception("Cannot add matrices");
         }
         for (int i = 0; i < data.Count; i++) {
@@ -157,87 +157,64 @@ public class Matrix {
         }
         Console.WriteLine();
     }
-
-    public static int NajmniejszaWspolnaWielokrotnosc(int a, int b) {
-        int nww = 1;
-
-        if (a == 0 || b == 0) {
-            throw new Exception("Zero input!");
-        }
-
-        int i = 2;
-        while (i <= a || i <= b) {
-            if (
-                a % i == 0 ||
-                b % i == 0
-            ) {
-                if (a % i == 0) {
-                    a /= i;
-                }
-                if (b % i == 0) {
-                    b /= i;
-                }
-                nww *= i;
+    public void Print(
+        List<int> list
+    ) {
+        int j = 0;
+        foreach (List<int> line in this.data) {
+            Console.Write("| ");
+            foreach (int i in line) {
+                Console.Write($"{i} ");
             }
-            else {
-                i += 1;
-            }
+            Console.Write($"| {list[j]}\n");
+            j++;
         }
-
-        return nww;
+        Console.WriteLine();
     }
-    public static int NajwiekszyWspolnyDzielnik(int a, int b) {
-        if (a == 0 || b == 0) {
-            return 0;
-        }
 
-        if (a < 0) {
-            a *= -1;
-        }
-        if (a < 0) {
-            a *= -1;
-        }
+    public static int NajmniejszaWspolnaWielokrotnosc(int a, int b)
+    {
+        if (a == 0 || b == 0) throw new Exception("Zero input!");
+        return Math.Abs(a * b) / NajwiekszyWspolnyDzielnik(a, b);
+    }
+
+    public static int NajwiekszyWspolnyDzielnik(int a, int b)
+    {
+        if (a == 0 || b == 0)
+            return 0;
+
+        if (a < 0) a *= -1;
+        if (b < 0) b *= -1; // bug fix: było "a" zamiast "b"
 
         List<int> dzielnikia = new List<int>();
         List<int> dzielnikib = new List<int>();
-        
+
         int i = 2;
-        while (i <= a) {
-            if (a % i == 0) {
-                dzielnikia.Add(i);
-                a /= i;
-            }
-            else {
-                i++;
-            }
+        while (i <= a)
+        {
+            if (a % i == 0) { dzielnikia.Add(i); a /= i; }
+            else i++;
         }
 
         i = 2;
-        while (i <= b) {
-            if (b % i == 0) {
-                dzielnikib.Add(i);
-                b /= i;
-            }
-            else {
-                i++;
-            }
+        while (i <= b)
+        {
+            if (b % i == 0) { dzielnikib.Add(i); b /= i; }
+            else i++;
         }
 
         int nwd = 1;
-        while (dzielnikia.Count > 0 && dzielnikib.Count > 0) {
+        while (dzielnikia.Count > 0 && dzielnikib.Count > 0)
+        {
             if (dzielnikia[0] == dzielnikib[0]) {
                 nwd *= dzielnikia[0];
                 dzielnikia.RemoveAt(0);
                 dzielnikib.RemoveAt(0);
             }
-            else {
-                if (dzielnikia[0] < dzielnikib[0]) {
-                    dzielnikia.RemoveAt(0);
-                }
-                else {
-                    dzielnikib.RemoveAt(0);
-                }
-            }
+            else if (dzielnikia[0] < dzielnikib[0])
+                dzielnikia.RemoveAt(0);
+            else
+                dzielnikib.RemoveAt(0);
         }
 
         return nwd;
@@ -245,15 +222,16 @@ public class Matrix {
 
     public static int NajwiekszyWspolnyDzielnik(List<int> list) {
         int nwd = list[0];
+        for (int i = 0; nwd == 0; i++) {
+            nwd = list[i];
+        }
+        
         foreach (int i in list) {
             if (i == 0) continue;
-
             nwd = NajwiekszyWspolnyDzielnik(nwd, i);
         }
-
         return nwd;
     }
-
 
     public void GaussUp() {
         for (int x = 0; x < this.width; x++) {
@@ -273,8 +251,8 @@ public class Matrix {
                 }
 
                 
-                for (int i = 0; i < width; i++) {
-                    int nwd = NajwiekszyWspolnyDzielnik(data[i].GetRange(i, data.Count-i));
+                for (int i = 0; i < y+1; i++) {
+                    int nwd = NajwiekszyWspolnyDzielnik(data[i].GetRange(0, data.Count));
                     for (int j = 0; j < width; j++) {
                         data[i][j] /= nwd;
                     }
@@ -284,8 +262,88 @@ public class Matrix {
         }
     }
     
-    public void GaussLow() {
+    public void GaussUp(
+        List<int> list
+    ) {
+        if (list.Count != data.Count) return;
         
+        for (int x = 0; x < this.width; x++) {
+            for (int y = x+1; y < this.height; y++) {
+                if (data[y][x] == 0) continue;
+                int nww = NajmniejszaWspolnaWielokrotnosc(data[x][x], data[y][x]);
+
+                int mul1 = nww / data[x][x];
+                int mul2 = nww / data[y][x];
+
+                for (int i = 0; i < this.width; i++) {
+                    data[x][i] *= mul1;
+                    data[y][i] *= mul2;
+                }
+
+                list[x] *= mul1;
+                list[y] *= mul2;
+
+                for (int i = 0; i < this.width; i++) {
+                    data[y][i] -= data[x][i];
+                }
+
+                list[y] -= list[x];
+
+                
+                for (int i = 0; i < y+1; i++) {
+                    List<int> l = data[i].GetRange(0, data.Count);
+                    l.Add(list[i]);
+                    int nwd = NajwiekszyWspolnyDzielnik(l);
+                    for (int j = 0; j < width; j++) {
+                        data[i][j] /= nwd;
+                    }
+                    list[i] /= nwd;
+                }
+
+            }
+        }
+    }
+    
+    public void GaussLow(
+        List<int> list
+    ) {
+        if (list.Count != data.Count) return;
+        
+        for (int x = this.width-1; x >= 0; x--) {
+            for (int y = x-1; y >= 0; y--) {
+                if (data[y][x] == 0) continue;
+                int nww = NajmniejszaWspolnaWielokrotnosc(data[x][x], data[y][x]);
+
+                int mul1 = nww / data[x][x];
+                int mul2 = nww / data[y][x];
+
+                for (int i = 0; i < this.width; i++) {
+                    data[x][i] *= mul1;
+                    data[y][i] *= mul2;
+                }
+
+                list[x] *= mul1;
+                list[y] *= mul2;
+
+                for (int i = 0; i < this.width; i++) {
+                    data[y][i] -= data[x][i];
+                }
+
+                list[y] -= list[x];
+
+                
+                for (int i = 0; i < y+1; i++) {
+                    List<int> l = data[i].GetRange(0, data.Count);
+                    l.Add(list[i]);
+                    int nwd = NajwiekszyWspolnyDzielnik(l);
+                    for (int j = 0; j < width; j++) {
+                        data[i][j] /= nwd;
+                    }
+                    list[i] /= nwd;
+                }
+
+            }
+        }       
     }
     
 }
