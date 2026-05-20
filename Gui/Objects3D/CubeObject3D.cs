@@ -5,12 +5,12 @@ namespace Gui;
 
 public class CubeObject3D : Object3D {
 
-    private readonly float size;
+    public readonly float size;
 
     public CubeObject3D(
-        Vector3 location = new Vector3(),
+        Vector3 position = new Vector3(),
         float size = 1.0f
-    ) : base(location) {
+    ) : base(position) {
         this.size = size;
     }
     
@@ -20,9 +20,9 @@ public class CubeObject3D : Object3D {
     public override void Draw() {
         Raylib.DrawCubeWires(
             new Vector3(
-                base.location[0],
-                base.location[1],
-                base.location[2]
+                base.position[0],
+                base.position[1],
+                base.position[2]
             ),
             size,
             size,

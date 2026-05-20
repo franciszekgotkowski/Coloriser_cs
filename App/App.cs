@@ -1,4 +1,6 @@
-﻿using Gui;
+﻿using System.Runtime.CompilerServices;
+using Gui;
+using Raylib_cs;
 
 namespace Colorister;
 
@@ -134,6 +136,11 @@ public static class App {
             )
         );
         AppTheme.Instance.SetTheme(ColorTheme.Kanagawa);
+
+        ColorComunication.Instance.colorList[0] = Color.DarkBlue;
+        ColorComunication.Instance.colorList[1] = Color.Lime;
+        ColorComunication.Instance.colorList[2] = Color.Red;
+        
 
         window.Loop();
     }
