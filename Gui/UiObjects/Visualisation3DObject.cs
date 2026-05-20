@@ -24,6 +24,7 @@ public class Visualisation3DObject : UiObject {
     ) : this (0, 0) {
         this.scene = scene;
         this.scene.camera = this.camera;
+        this.scene.renderTexture = this.renderTexture;
     }
 
     public override void Resize(

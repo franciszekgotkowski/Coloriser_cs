@@ -3,15 +3,20 @@ using Raylib_cs;
 namespace Gui;
 
 public class PlaneScene : Scene3D {
+    private CubeObject3D cube;
+    private List<ColorPoint3D> colorsPoints;
 
-    public PlaneScene() {
+    public PlaneScene(
+    ) {
         base.camera = camera;
-        objects.Add(new CubeObject3D());
+        cube = new CubeObject3D();
+        colorsPoints = new List<ColorPoint3D>(3);
     }
     
     public override void Update() {
-        foreach (Object3D obj in base.objects) {
-            obj.Update();
+        cube.Update();
+        foreach (ColorPoint3D colorPoints in colorsPoints) {
+            colorPoints.Update();
         }
     }
     public override void Draw() {
@@ -19,8 +24,9 @@ public class PlaneScene : Scene3D {
             throw new Exception("No camera attached! to scene");
         }
         Raylib.BeginMode3D(camera.camera);
-        foreach (Object3D obj in base.objects) {
-            obj.Draw();
+        cube.Draw();
+        foreach (ColorPoint3D colorPoints in colorsPoints) {
+            colorPoints.Draw();
         }
         Raylib.EndMode3D();
     }
