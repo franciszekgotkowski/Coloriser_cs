@@ -181,7 +181,7 @@ public class Matrix {
     public static int NajwiekszyWspolnyDzielnik(int a, int b)
     {
         if (a == 0 || b == 0)
-            return 0;
+            return 1;
 
         if (a < 0) a *= -1;
         if (b < 0) b *= -1; // bug fix: było "a" zamiast "b"
@@ -222,8 +222,12 @@ public class Matrix {
 
     public static int NajwiekszyWspolnyDzielnik(List<int> list) {
         int nwd = list[0];
-        for (int i = 0; nwd == 0; i++) {
+        for (int i = 0; i < list.Count && nwd == 0; i++) {
             nwd = list[i];
+        }
+
+        if (nwd == 0) {
+            nwd = 1;
         }
         
         foreach (int i in list) {
@@ -268,6 +272,17 @@ public class Matrix {
         if (list.Count != data.Count) return;
         
         for (int x = 0; x < this.width; x++) {
+
+            for (int y = x + 1; y < this.height && data[x][x] == 0; y++) {
+                List<int> t = data[x];
+                data[x] = data[y];
+                data[y] = t;
+
+                int i = list[x];
+                list[x] = list[y];
+                list[y] = i;
+            }
+            
             for (int y = x+1; y < this.height; y++) {
                 if (data[y][x] == 0) continue;
                 int nww = NajmniejszaWspolnaWielokrotnosc(data[x][x], data[y][x]);
@@ -310,8 +325,21 @@ public class Matrix {
         if (list.Count != data.Count) return;
         
         for (int x = this.width-1; x >= 0; x--) {
+            
+            for (int y = x - 1; y >= 0 && data[x][x] == 0; y--) {
+                List<int> t = data[x];
+                data[x] = data[y];
+                data[y] = t;
+
+                int i = list[x];
+                list[x] = list[y];
+                list[y] = i;
+            }
+            
             for (int y = x-1; y >= 0; y--) {
+                
                 if (data[y][x] == 0) continue;
+                
                 int nww = NajmniejszaWspolnaWielokrotnosc(data[x][x], data[y][x]);
 
                 int mul1 = nww / data[x][x];
@@ -344,6 +372,19 @@ public class Matrix {
 
             }
         }       
+    }
+
+    public void Solve(
+        List<int> list
+    ) {
+        this.GaussUp(list);
+        this.GaussLow(list);
+
+        for (int i = 0; i < this.width; i++) {
+            int nwd = NajwiekszyWspolnyDzielnik(list[i], data[i][i]);
+            list[i] /= nwd;
+            data[i][i] /= nwd;
+        }
     }
     
 }
