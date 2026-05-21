@@ -3,11 +3,11 @@ using Raylib_cs;
 
 namespace Gui;
 
-public class CubeObject3D : Object3D {
+public class Cube3D : Object3D {
 
     public readonly float size;
 
-    public CubeObject3D(
+    public Cube3D(
         Vector3 position = new Vector3(),
         float size = 1.0f
     ) : base(position) {

@@ -140,8 +140,12 @@ public static class App {
         ColorComunication.Instance.colorList[0] = Color.DarkBlue;
         ColorComunication.Instance.colorList[1] = Color.Lime;
         ColorComunication.Instance.colorList[2] = Color.Red;
-        
 
+        EdgesComunication.Instance.colorList[0] = Color.DarkBlue;
+        EdgesComunication.Instance.colorList[1] = Color.Lime;
+        EdgesComunication.Instance.colorList[2] = Color.Red;
+        EdgesComunication.Instance.colorList[3] = Color.Pink;
+        
         window.Loop();
     }
 }
