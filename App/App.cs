@@ -130,22 +130,27 @@ public static class App {
             rootPane
         );
 
+        Visualisation3DObject vis = new Visualisation3DObject();
+        PlaneScene plane = new PlaneScene(
+            vis.camera,
+            vis.renderTexture
+            );
+        vis.AddScene3D(plane);
+        
         tenZTextura.AddGuiObject(
-            new Visualisation3DObject(
-                new PlaneScene()
-            )
+            vis
         );
         AppTheme.Instance.SetTheme(ColorTheme.Kanagawa);
 
         ColorComunication.Instance.colorList[0] = Color.DarkBlue;
         ColorComunication.Instance.colorList[1] = Color.Lime;
         ColorComunication.Instance.colorList[2] = Color.Red;
-
+        
         EdgesComunication.Instance.colorList[0] = Color.DarkBlue;
         EdgesComunication.Instance.colorList[1] = Color.Lime;
         EdgesComunication.Instance.colorList[2] = Color.Red;
-        EdgesComunication.Instance.colorList[3] = Color.Pink;
-        
+        EdgesComunication.Instance.colorList[3] = Color.Gold;
+
         window.Loop();
     }
 }

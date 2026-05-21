@@ -5,11 +5,16 @@ using Raylib_cs;
 namespace Gui;
 
 public class ColorPoint3D : Object3D {
-    private Color color;
     private readonly Camera camera;
     private readonly RenderTexture renderTexture;
     private readonly Cube3D cube;
     private readonly int colorID;
+
+    private Color color {
+        get {
+            return ColorComunication.Instance.colorList[colorID];
+        }
+    }
 
     public ColorPoint3D(
         Camera camera,
@@ -17,19 +22,24 @@ public class ColorPoint3D : Object3D {
         Cube3D cube,
         int colorId
     ) {
-        Debug.Assert(camera != null);
+        if (
+            camera == null ||
+            renderTexture == null ||
+            cube == null
+        ) {
+            throw new NullReferenceException();
+        }
+        
         this.camera = camera;
-        Debug.Assert(renderTexture != null);
         this.renderTexture = renderTexture;
-        Debug.Assert(cube != null);
         this.cube = cube;
         this.colorID = colorId;
     }
-    
+
     public override void Update() {
-        color = ColorComunication.Instance.colorList[colorID];
-        position = color.ToCubePosition(cube);
+        this.position = this.color.ToCubePosition(cube);
     }
+    
     public override void Draw() {
         Vector2 screenspacePosition = Raylib.GetWorldToScreenEx(
             this.position,

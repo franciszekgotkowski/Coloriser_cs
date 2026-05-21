@@ -6,7 +6,7 @@ namespace Gui;
 public class Visualisation3DObject : UiObject {
     public Camera camera;
     public RenderTexture renderTexture;
-    public Scene3D scene;
+    public Scene3D? scene;
     
     public Visualisation3DObject(
         int width = 0,
@@ -18,15 +18,7 @@ public class Visualisation3DObject : UiObject {
             height
         );
     }
-
-    public Visualisation3DObject(
-        Scene3D scene
-    ) : this (0, 0) {
-        this.scene = scene;
-        this.scene.camera = this.camera;
-        this.scene.renderTexture = this.renderTexture;
-    }
-
+    
     public override void Resize(
         int xPos, 
         int yPos, 
@@ -39,6 +31,16 @@ public class Visualisation3DObject : UiObject {
         }
     }
 
+    public void AddScene3D(
+        Scene3D scene
+    ) {
+        if (scene == null) {
+            throw new NullReferenceException();
+        }
+
+        this.scene = scene;
+    }
+
     public override void Draw() {
         renderTexture.Activate();
         Raylib.ClearBackground(AppTheme.Instance.Theme.backgroundColor);
@@ -49,10 +51,12 @@ public class Visualisation3DObject : UiObject {
             2.0f * (float)Math.Cos(Raylib.GetTime()/5.0f)
         );
 
-        if (this.scene != null) {
-            this.scene.Update();
-            this.scene.Draw();
+        if (scene == null) {
+            throw new Exception("Scene not initialized");
         }
+
+        this.scene.Update();
+        this.scene.Draw();
         
         renderTexture.Deactivate();
         Raylib.DrawTextureRec(

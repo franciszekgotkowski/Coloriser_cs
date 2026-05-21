@@ -8,5 +8,5 @@ public class EdgesComunication {
 
     public static EdgesComunication Instance = new EdgesComunication();
 
-    public List<Color> colorList;
+    public Color[] colorList;
 }

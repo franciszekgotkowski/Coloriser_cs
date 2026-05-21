@@ -8,5 +8,5 @@ public class ColorComunication {
 
     public static ColorComunication Instance = new ColorComunication();
 
-    public List<Color> colorList;
+    public Color[] colorList;
 }

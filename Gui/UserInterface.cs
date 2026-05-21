@@ -51,12 +51,6 @@ public static class UserInterface {
         IntRect rect,
         string txt
     ) {
-        
-        Debug.Assert(rect.width > 0.0f);
-        Debug.Assert(rect.height > 0.0f);
-        Debug.Assert(rect.x > 0.0f);
-        Debug.Assert(rect.y > 0.0f);
-        
         int textWidth = Raylib.MeasureText(txt, AppTheme.Instance.FontSize);
         int textOffset = 10;
         int textBorder = 10;
