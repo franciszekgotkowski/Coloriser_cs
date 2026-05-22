@@ -386,5 +386,45 @@ public class Matrix {
             data[i][i] /= nwd;
         }
     }
+
+    // Use only with square diagonal matrices
+    public bool IsDiagonalInconsistent(
+        List<int> list
+    ) {
+        if (list == null) {
+            throw new ArgumentNullException();
+        }
+
+        for (int i = 0; i < this.width; i++) {
+            if (
+                this.data[i][i] == 0 &&
+                list[i] != 0
+            ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    
+    // Use only with square diagonal matrices
+    public bool IsDiagonalIndependent(
+        List<int> list
+    ) {
+        if (list == null) {
+            throw new ArgumentNullException();
+        }
+
+        for (int i = 0; i < this.width; i++) {
+            if (
+                this.data[i][i] == 0 &&
+                list[i] == 0
+            ) {
+                return false;
+            }
+        }
+
+        return true;
+    }
     
 }

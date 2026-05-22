@@ -142,13 +142,13 @@ public static class App {
         );
         AppTheme.Instance.SetTheme(ColorTheme.Kanagawa);
 
-        ColorComunication.Instance.colorList[0] = Color.DarkBlue;
-        ColorComunication.Instance.colorList[1] = Color.Lime;
-        ColorComunication.Instance.colorList[2] = Color.Red;
-        
-        EdgesComunication.Instance.colorList[0] = Color.DarkBlue;
-        EdgesComunication.Instance.colorList[1] = Color.Lime;
-        EdgesComunication.Instance.colorList[2] = Color.Red;
+        ColorComunication.Instance.colorList[0] = new Color(20, 100, 40);
+        ColorComunication.Instance.colorList[1] =  new Color(170, 200, 130);
+        ColorComunication.Instance.colorList[2] = new Color(20, 100, 240);
+
+        EdgesComunication.Instance.colorList[0] = ColorComunication.Instance.colorList[0];
+        EdgesComunication.Instance.colorList[1] =  ColorComunication.Instance.colorList[1];
+        EdgesComunication.Instance.colorList[2] =  ColorComunication.Instance.colorList[2];
         EdgesComunication.Instance.colorList[3] = Color.Gold;
 
         window.Loop();

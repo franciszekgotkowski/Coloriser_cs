@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Numerics;
 using Raylib_cs;
 
@@ -96,19 +97,18 @@ public class PlaneScene : Scene3D {
 
 
         vector_v = new List<int>(){
-              -(colorPoints[1].color.R - colorPoints[0].color.R),
-              -(colorPoints[1].color.G - colorPoints[0].color.G),
-              -(colorPoints[1].color.B - colorPoints[0].color.B),
+            -(colorPoints[1].color.R - colorPoints[0].color.R),
+            -(colorPoints[1].color.G - colorPoints[0].color.G),
+            -(colorPoints[1].color.B - colorPoints[0].color.B),
         };
         
         vector_u = new List<int>(){
-               -(colorPoints[2].color.R - colorPoints[0].color.R),
-               -(colorPoints[2].color.G - colorPoints[0].color.G),
-               -(colorPoints[2].color.B - colorPoints[0].color.B),
+            -(colorPoints[2].color.R - colorPoints[0].color.R),
+            -(colorPoints[2].color.G - colorPoints[0].color.G),
+            -(colorPoints[2].color.B - colorPoints[0].color.B),
         };
 
         Raylib.BeginMode3D(camera.camera);
-        Console.WriteLine("Początek klatki!");
         for (int i = 0; i < edgeDirections.Count; i++) {
 
             List<int> vector_cd = new List<int>() {
@@ -130,44 +130,32 @@ public class PlaneScene : Scene3D {
             if (
                 !matrix.IsDiagonalInconsistent(vector_cd)
             ) {
-                int R;
-                int G;
-                int B;
-                
-                if (
-                    matrix.IsDiagonalIndependent(vector_cd)
-                ) {
-                    R = vector_cd[0] / matrix.data[0][0];
-                    G = vector_cd[1] / matrix.data[1][1];
-                    B = vector_cd[2] / matrix.data[2][2];
-                }
-                else {
-                    // continue;
-                    R = edgeStartingPoints[i][0];
-                    G = edgeStartingPoints[i][1];
-                    B = edgeStartingPoints[i][2];
-                }
+                float a, b, n;
+                a = (float)vector_cd[0] / matrix.data[0][0];
+                b = (float)vector_cd[1] / matrix.data[1][1];
+                n = (float)vector_cd[2] / matrix.data[2][2];
+                Console.WriteLine(n);
+
+                int R = (int)(edgeDirections[i][0] * n) + edgeStartingPoints[i][0];
+                int G = (int)(edgeDirections[i][1] * n) + edgeStartingPoints[i][1];
+                int B = (int)(edgeDirections[i][2] * n) + edgeStartingPoints[i][2];
 
                 if (
                     R >= 0 && R <= byte.MaxValue &&
                     G >= 0 && G <= byte.MaxValue &&
                     B >= 0 && B <= byte.MaxValue
                 ) {
-                    Console.WriteLine($"\t R: {R}, G: {G}, B: {B}");
-                    Color color = new Color(
-                        (byte)(vector_cd[0] / matrix.data[0][0]),
-                        (byte)(vector_cd[1] / matrix.data[1][1]),
-                        (byte)(vector_cd[2] / matrix.data[2][2])
+                    Color color = new Color(R, G, B);
+                
+                    Raylib.DrawSphere(
+                        color.ToCubePosition(cube), 
+                        0.05f,
+                        Color.RayWhite
                     );
-            
-                    // DEBUG
-                    Vector3 cubePosition = color.ToCubePosition(cube);
-                    Raylib.DrawSphere(cubePosition, 0.05f, Color.RayWhite);
                 }
             }
             
         }
-        Console.WriteLine("Koniec klatki!");
         Raylib.EndMode3D();
     }
     
@@ -192,6 +180,16 @@ public class PlaneScene : Scene3D {
         }
         Raylib.EndMode3D();
 
+        ColorComunication.Instance.colorList[1] = new Color(
+            170,
+            (130 + (int)(100 * Math.Sin(Raylib.GetTime()))),
+            130
+        );
+        EdgesComunication.Instance.colorList[1] = new Color(
+            170,
+            (130 + (int)(100 * Math.Sin(Raylib.GetTime()))),
+            130
+        );
         
         foreach (ColorPoint3D colorPoints in colorPoints) {
             colorPoints.Draw();
