@@ -16,9 +16,6 @@ public class ColorPoint3D : Object3D {
         }
     }
 
-    // public Color color() {
-        // return ColorComunication.Instance.colorList[colorID];
-    // }
 
     public ColorPoint3D(
         Camera camera,

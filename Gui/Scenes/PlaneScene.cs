@@ -127,26 +127,45 @@ public class PlaneScene : Scene3D {
             matrix.Transpose();
             matrix.Solve(vector_cd);
 
-            int R = vector_cd[0] / matrix.data[0][0];
-            int G = vector_cd[1] / matrix.data[1][1];
-            int B = vector_cd[2] / matrix.data[2][2];
-
             if (
-                R >= 0 && R <= byte.MaxValue &&
-                G >= 0 && G <= byte.MaxValue &&
-                B >= 0 && B <= byte.MaxValue
+                !matrix.IsDiagonalInconsistent(vector_cd)
             ) {
-                Console.WriteLine($"\t R: {R}, G: {G}, B: {B}");
-                Color color = new Color(
-                    (byte)(vector_cd[0] / matrix.data[0][0]),
-                    (byte)(vector_cd[1] / matrix.data[1][1]),
-                    (byte)(vector_cd[2] / matrix.data[2][2])
-                );
+                int R;
+                int G;
+                int B;
+                
+                if (
+                    matrix.IsDiagonalIndependent(vector_cd)
+                ) {
+                    R = vector_cd[0] / matrix.data[0][0];
+                    G = vector_cd[1] / matrix.data[1][1];
+                    B = vector_cd[2] / matrix.data[2][2];
+                }
+                else {
+                    // continue;
+                    R = edgeStartingPoints[i][0];
+                    G = edgeStartingPoints[i][1];
+                    B = edgeStartingPoints[i][2];
+                }
+
+                if (
+                    R >= 0 && R <= byte.MaxValue &&
+                    G >= 0 && G <= byte.MaxValue &&
+                    B >= 0 && B <= byte.MaxValue
+                ) {
+                    Console.WriteLine($"\t R: {R}, G: {G}, B: {B}");
+                    Color color = new Color(
+                        (byte)(vector_cd[0] / matrix.data[0][0]),
+                        (byte)(vector_cd[1] / matrix.data[1][1]),
+                        (byte)(vector_cd[2] / matrix.data[2][2])
+                    );
             
-                // DEBUG
-                Vector3 cubePosition = color.ToCubePosition(cube);
-                Raylib.DrawSphere(cubePosition, 0.05f, Color.RayWhite);
+                    // DEBUG
+                    Vector3 cubePosition = color.ToCubePosition(cube);
+                    Raylib.DrawSphere(cubePosition, 0.05f, Color.RayWhite);
+                }
             }
+            
         }
         Console.WriteLine("Koniec klatki!");
         Raylib.EndMode3D();

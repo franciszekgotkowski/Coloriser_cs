@@ -118,11 +118,18 @@ public class Window {
                 }
             }
 
-            EdgesComunication.Instance.colorList[0] = new Color(
-                Color.DarkBlue.R,
-                Color.DarkBlue.G,
-                (byte)(126 + (100 * Math.Sin(Raylib.GetTime())))
-            );
+            // EdgesComunication.Instance.colorList[0] = new Color(
+            //     Color.DarkBlue.R,
+            //     Color.DarkBlue.G,
+            //     (byte)(126 + (100 * Math.Sin(Raylib.GetTime())))
+            // );
+            // ColorComunication.Instance.colorList[0] = new Color(
+            //     Color.DarkBlue.R,
+            //     Color.DarkBlue.G,
+            //     (byte)(126 + (100 * Math.Sin(Raylib.GetTime())))
+            // );
+            
+            
             UpdatePanesToNewSizes();
             DrawProgram();
         }
