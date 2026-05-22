@@ -108,7 +108,7 @@ public class PlaneScene : Scene3D {
             -(colorPoints[2].color.B - colorPoints[0].color.B),
         };
 
-        Raylib.BeginMode3D(camera.camera);
+        List<Color> colors = new List<Color>();
         for (int i = 0; i < edgeDirections.Count; i++) {
 
             List<int> vector_cd = new List<int>() {
@@ -145,17 +145,43 @@ public class PlaneScene : Scene3D {
                     G >= 0 && G <= byte.MaxValue &&
                     B >= 0 && B <= byte.MaxValue
                 ) {
-                    Color color = new Color(R, G, B);
-                
-                    Raylib.DrawSphere(
-                        color.ToCubePosition(cube), 
-                        0.05f,
-                        Color.RayWhite
-                    );
+                    // Color color = new Color(R, G, B);
+                    //
+                    // Raylib.DrawSphere(
+                    //     color.ToCubePosition(cube), 
+                    //     0.05f,
+                    //     Color.RayWhite
+                    // );
+                    
+                    colors.Add(new Color(R, G, B));
                 }
             }
             
         }
+        Raylib.BeginMode3D(camera.camera);
+        foreach (Color col in colors) {
+            Raylib.DrawSphere(
+                col.ToCubePosition(cube), 
+                0.05f,
+                Color.RayWhite
+            );
+        }
+        Rlgl.Begin(DrawMode.Triangles);
+        foreach (Color col in colors) {
+            Vector3 worldspacePosition = col.ToCubePosition(cube);
+            Rlgl.Color4ub(
+                col.R,
+                col.G,
+                col.B,
+                byte.MaxValue
+            );
+            Rlgl.Vertex3f(
+                worldspacePosition.X,
+                worldspacePosition.Y,
+                worldspacePosition.Z
+            );
+        }
+        Rlgl.End();
         Raylib.EndMode3D();
     }
     
@@ -175,9 +201,9 @@ public class PlaneScene : Scene3D {
         }
         Raylib.BeginMode3D(camera.camera);
         cube.Draw();
-        foreach (Triangle3D triangle3D in triangles) {
-            triangle3D.Draw();
-        }
+        // foreach (Triangle3D triangle3D in triangles) {
+            // triangle3D.Draw();
+        // }
         Raylib.EndMode3D();
 
         ColorComunication.Instance.colorList[1] = new Color(
@@ -189,6 +215,17 @@ public class PlaneScene : Scene3D {
             170,
             (130 + (int)(100 * Math.Sin(Raylib.GetTime()))),
             130
+        );
+        
+        ColorComunication.Instance.colorList[2] = new Color(
+            20,
+            (100 + (int)(60 * Math.Sin(Raylib.GetTime()*0.5f))),
+            240
+        );
+        EdgesComunication.Instance.colorList[2] = new Color(
+            20,
+            (100 + (int)(60 * Math.Sin(Raylib.GetTime()*0.5f))),
+            240
         );
         
         foreach (ColorPoint3D colorPoints in colorPoints) {
