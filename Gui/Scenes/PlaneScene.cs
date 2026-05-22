@@ -1,6 +1,4 @@
 using System.Numerics;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
 using Raylib_cs;
 
 namespace Gui;
@@ -9,6 +7,9 @@ public class PlaneScene : Scene3D {
     readonly private Cube3D cube;
     
     private readonly ColorPoint3D[] colorPoints = new ColorPoint3D[3];
+    private List<int> vector_v;
+    private List<int> vector_u;
+    
     private readonly Triangle3D[] triangles = new Triangle3D[2];
 
     public PlaneScene(
@@ -57,23 +58,6 @@ public class PlaneScene : Scene3D {
 
     }
 
-    class CubeEdge {
-        private List<int> direction = new List<int>();
-        private List<int> startingPoint = new List<int>();
-
-        public CubeEdge(
-            List<int> direction,
-            List<int> startingPoint
-        ) {
-            if (
-                direction.Count != 3 ||
-                startingPoint.Count != 3 
-            ) {
-                throw new ArgumentException();
-            }
-        }
-    }
-
     void UpdatePlaneData() {
         
         List<List<int>> edgeStartingPoints = new List<List<int>>() {
@@ -110,6 +94,62 @@ public class PlaneScene : Scene3D {
             new List<int>() { 0, 0, -1 },
         };
 
+
+        vector_v = new List<int>(){
+              -(colorPoints[1].color.R - colorPoints[0].color.R),
+              -(colorPoints[1].color.G - colorPoints[0].color.G),
+              -(colorPoints[1].color.B - colorPoints[0].color.B),
+        };
+        
+        vector_u = new List<int>(){
+               -(colorPoints[2].color.R - colorPoints[0].color.R),
+               -(colorPoints[2].color.G - colorPoints[0].color.G),
+               -(colorPoints[2].color.B - colorPoints[0].color.B),
+        };
+
+        Raylib.BeginMode3D(camera.camera);
+        Console.WriteLine("Początek klatki!");
+        for (int i = 0; i < edgeDirections.Count; i++) {
+
+            List<int> vector_cd = new List<int>() {
+                colorPoints[0].color.ToIntList()[0] - edgeStartingPoints[i][0],
+                colorPoints[0].color.ToIntList()[1] - edgeStartingPoints[i][1],
+                colorPoints[0].color.ToIntList()[2] - edgeStartingPoints[i][2]
+            };
+
+            Matrix matrix = new Matrix(
+                new List<List<int>>() {
+                    vector_u,
+                    vector_v,
+                    edgeDirections[i]
+                }
+            );
+            matrix.Transpose();
+            matrix.Solve(vector_cd);
+
+            int R = vector_cd[0] / matrix.data[0][0];
+            int G = vector_cd[1] / matrix.data[1][1];
+            int B = vector_cd[2] / matrix.data[2][2];
+
+            if (
+                R >= 0 && R <= byte.MaxValue &&
+                G >= 0 && G <= byte.MaxValue &&
+                B >= 0 && B <= byte.MaxValue
+            ) {
+                Console.WriteLine($"\t R: {R}, G: {G}, B: {B}");
+                Color color = new Color(
+                    (byte)(vector_cd[0] / matrix.data[0][0]),
+                    (byte)(vector_cd[1] / matrix.data[1][1]),
+                    (byte)(vector_cd[2] / matrix.data[2][2])
+                );
+            
+                // DEBUG
+                Vector3 cubePosition = color.ToCubePosition(cube);
+                Raylib.DrawSphere(cubePosition, 0.05f, Color.RayWhite);
+            }
+        }
+        Console.WriteLine("Koniec klatki!");
+        Raylib.EndMode3D();
     }
     
     public override void Update() {
@@ -118,8 +158,10 @@ public class PlaneScene : Scene3D {
         foreach (ColorPoint3D colorPoints in this.colorPoints) {
             colorPoints.Update();
         }
+        UpdatePlaneData();
         
     }
+    
     public override void Draw() {
         if (base.camera == null) {
             throw new Exception("No camera attached! to scene");

@@ -10,11 +10,15 @@ public class ColorPoint3D : Object3D {
     private readonly Cube3D cube;
     private readonly int colorID;
 
-    private Color color {
+    public Color color {
         get {
             return ColorComunication.Instance.colorList[colorID];
         }
     }
+
+    // public Color color() {
+        // return ColorComunication.Instance.colorList[colorID];
+    // }
 
     public ColorPoint3D(
         Camera camera,

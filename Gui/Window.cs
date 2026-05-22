@@ -117,8 +117,12 @@ public class Window {
                     AppTheme.Instance.SetTheme(ColorTheme.Kanagawa);
                 }
             }
-            
-            // rootPane.UpdatePerctentForChildCanvas(40 + Convert.ToInt32(20 * Math.Sin(Raylib.GetTime())));
+
+            EdgesComunication.Instance.colorList[0] = new Color(
+                Color.DarkBlue.R,
+                Color.DarkBlue.G,
+                (byte)(126 + (100 * Math.Sin(Raylib.GetTime())))
+            );
             UpdatePanesToNewSizes();
             DrawProgram();
         }
