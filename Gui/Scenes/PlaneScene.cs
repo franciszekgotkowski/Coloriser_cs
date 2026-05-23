@@ -58,43 +58,9 @@ public class PlaneScene : Scene3D {
         );
 
     }
-
+    
     void UpdatePlaneData() {
         
-        List<List<int>> edgeStartingPoints = new List<List<int>>() {
-            new List<int>() { 0, 0, 0 },
-            new List<int>() { byte.MaxValue, 0, 0 },
-            new List<int>() { byte.MaxValue, 0, byte.MaxValue},
-            new List<int>() { 0, 0, byte.MaxValue },
-            
-            new List<int>() { 0, 0, 0 },
-            new List<int>() { byte.MaxValue, 0, 0 },
-            new List<int>() { byte.MaxValue, 0, byte.MaxValue},
-            new List<int>() { 0, 0, byte.MaxValue },
-            
-            new List<int>() { 0, byte.MaxValue, 0 },
-            new List<int>() { byte.MaxValue, byte.MaxValue, 0 },
-            new List<int>() { byte.MaxValue, byte.MaxValue, byte.MaxValue},
-            new List<int>() { 0, byte.MaxValue, byte.MaxValue },
-        };
-
-        List<List<int>> edgeDirections = new List<List<int>>() {
-            new List<int>() { 1, 0, 0 },
-            new List<int>() { 0, 0, 1 },
-            new List<int>() { -1, 0, 0 },
-            new List<int>() { 0, 0, -1 },
-            
-            new List<int>() { 0, 1, 0 },
-            new List<int>() { 0, 1, 0 },
-            new List<int>() { 0, 1, 0 },
-            new List<int>() { 0, 1, 0 },
-            
-            new List<int>() { 1, 0, 0 },
-            new List<int>() { 0, 0, 1 },
-            new List<int>() { -1, 0, 0 },
-            new List<int>() { 0, 0, -1 },
-        };
-
 
         vector_v = new List<int>(){
             -(colorPoints[1].color.R - colorPoints[0].color.R),
@@ -109,19 +75,19 @@ public class PlaneScene : Scene3D {
         };
 
         List<Color> colors = new List<Color>();
-        for (int i = 0; i < edgeDirections.Count; i++) {
+        for (int i = 0; i < CubeEdgesData.edgeDirections.Count; i++) {
 
             List<int> vector_cd = new List<int>() {
-                colorPoints[0].color.ToIntList()[0] - edgeStartingPoints[i][0],
-                colorPoints[0].color.ToIntList()[1] - edgeStartingPoints[i][1],
-                colorPoints[0].color.ToIntList()[2] - edgeStartingPoints[i][2]
+                colorPoints[0].color.ToIntList()[0] - CubeEdgesData.edgeStartingPoints[i][0],
+                colorPoints[0].color.ToIntList()[1] - CubeEdgesData.edgeStartingPoints[i][1],
+                colorPoints[0].color.ToIntList()[2] - CubeEdgesData.edgeStartingPoints[i][2]
             };
 
             Matrix matrix = new Matrix(
                 new List<List<int>>() {
                     vector_u,
                     vector_v,
-                    edgeDirections[i]
+                    CubeEdgesData.edgeDirections[i]
                 }
             );
             matrix.Transpose();
@@ -136,9 +102,9 @@ public class PlaneScene : Scene3D {
                 n = (float)vector_cd[2] / matrix.data[2][2];
                 Console.WriteLine(n);
 
-                int R = (int)(edgeDirections[i][0] * n) + edgeStartingPoints[i][0];
-                int G = (int)(edgeDirections[i][1] * n) + edgeStartingPoints[i][1];
-                int B = (int)(edgeDirections[i][2] * n) + edgeStartingPoints[i][2];
+                int R = (int)(CubeEdgesData.edgeDirections[i][0] * n) + CubeEdgesData.edgeStartingPoints[i][0];
+                int G = (int)(CubeEdgesData.edgeDirections[i][1] * n) + CubeEdgesData.edgeStartingPoints[i][1];
+                int B = (int)(CubeEdgesData.edgeDirections[i][2] * n) + CubeEdgesData.edgeStartingPoints[i][2];
 
                 if (
                     R >= 0 && R <= byte.MaxValue &&
