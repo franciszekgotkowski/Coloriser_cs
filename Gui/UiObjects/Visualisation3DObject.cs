@@ -46,9 +46,9 @@ public class Visualisation3DObject : UiObject {
         Raylib.ClearBackground(AppTheme.Instance.Theme.backgroundColor);
 
         this.camera.position = new Vector3(
-            2.0f * (float)Math.Sin(Raylib.GetTime()/5.0f),
+            2.0f * (float)Math.Sin(Raylib.GetTime()/10.0f),
             this.camera.position.Y,
-            2.0f * (float)Math.Cos(Raylib.GetTime()/5.0f)
+            2.0f * (float)Math.Cos(Raylib.GetTime()/10.0f)
         );
 
         if (scene == null) {

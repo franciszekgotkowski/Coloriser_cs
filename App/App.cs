@@ -7,15 +7,18 @@ namespace Colorister;
 public static class App {
 	public static void Main(string[] args) {
 
+		NamedBoxObject siemabox = new NamedBoxObject("siema");
+			siemabox.AddGuiObject(new ColorControllingObject());
 		Pane rootPane = new Pane(
-			new NamedBoxObject("siema")
+			siemabox
 		);
 
 		NamedBoxObject tenZTextura = new NamedBoxObject("mam render texture w sobie");
-
+		
+		
 		rootPane.AssignChildPane(
 			new Pane(tenZTextura),
-			30,
+			40,
 			Direction.RIGHT
 		);
 

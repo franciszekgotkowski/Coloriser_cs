@@ -111,27 +111,19 @@ public class PlaneScene : Scene3D {
                     G >= 0 && G <= byte.MaxValue &&
                     B >= 0 && B <= byte.MaxValue
                 ) {
-                    // Color color = new Color(R, G, B);
-                    //
-                    // Raylib.DrawSphere(
-                    //     color.ToCubePosition(cube),
-                    //     0.05f,
-                    //     Color.RayWhite
-                    // );
-
                     colors.Add(new Color(R, G, B));
                 }
             }
 
         }
         Raylib.BeginMode3D(camera.camera);
-        foreach (Color col in colors) {
-            Raylib.DrawSphere(
-                col.ToCubePosition(cube),
-                0.05f,
-                Color.RayWhite
-            );
-        }
+        // foreach (Color col in colors) {
+        //     Raylib.DrawSphere(
+        //         col.ToCubePosition(cube),
+        //         0.05f,
+        //         Color.RayWhite
+        //     );
+        // }
 
         List<Color> orderedPoints = CubeEdgesData.OrderColorsIntoRing(colors);
         for (int i = 0; i < orderedPoints.Count; i++) {
@@ -190,27 +182,27 @@ public class PlaneScene : Scene3D {
         // }
         Raylib.EndMode3D();
 
-        ColorComunication.Instance.colorList[1] = new Color(
-            170,
-            (130 + (int)(100 * Math.Sin(Raylib.GetTime()))),
-            130
-        );
-        EdgesComunication.Instance.colorList[1] = new Color(
-            170,
-            (130 + (int)(100 * Math.Sin(Raylib.GetTime()))),
-            130
-        );
-
-        ColorComunication.Instance.colorList[2] = new Color(
-            20,
-            (100 + (int)(60 * Math.Sin(Raylib.GetTime()*0.5f))),
-            240
-        );
-        EdgesComunication.Instance.colorList[2] = new Color(
-            20,
-            (100 + (int)(60 * Math.Sin(Raylib.GetTime()*0.5f))),
-            240
-        );
+        // ColorComunication.Instance.colorList[1] = new Color(
+        //     170,
+        //     (130 + (int)(100 * Math.Sin(Raylib.GetTime()))),
+        //     130
+        // );
+        // EdgesComunication.Instance.colorList[1] = new Color(
+        //     170,
+        //     (130 + (int)(100 * Math.Sin(Raylib.GetTime()))),
+        //     130
+        // );
+        //
+        // ColorComunication.Instance.colorList[2] = new Color(
+        //     20,
+        //     (100 + (int)(60 * Math.Sin(Raylib.GetTime()*0.5f))),
+        //     240
+        // );
+        // EdgesComunication.Instance.colorList[2] = new Color(
+        //     20,
+        //     (100 + (int)(60 * Math.Sin(Raylib.GetTime()*0.5f))),
+        //     240
+        // );
 
         foreach (ColorPoint3D colorPoints in colorPoints) {
             colorPoints.Draw();
