@@ -1,4 +1,5 @@
 using System.Numerics;
+using raygui_cs;
 using Raylib_cs;
 
 namespace Gui;
@@ -40,14 +41,14 @@ public class ButtonObject : UiObject {
             base.coordinates.y,
             base.coordinates.width,
             base.coordinates.height,
-            AppTheme.Instance.Theme.hoverFillInColor
-            );
-        Raylib.DrawRectangleLines(
-            base.coordinates.x,
-            base.coordinates.y,
-            base.coordinates.width,
-            base.coordinates.height,
             AppTheme.Instance.Theme.hoverBorderColor
+            );
+        Raylib.DrawRectangle(
+            base.coordinates.x + AppTheme.Instance.LineWidth,
+            base.coordinates.y + AppTheme.Instance.LineWidth,
+            base.coordinates.width - 2*AppTheme.Instance.LineWidth,
+            base.coordinates.height - 2*AppTheme.Instance.LineWidth,
+            AppTheme.Instance.Theme.hoverFillInColor
         );
         (int x, int y) pos = GetTextStartingPosition();
         Raylib.DrawText(
@@ -65,14 +66,14 @@ public class ButtonObject : UiObject {
             base.coordinates.y,
             base.coordinates.width,
             base.coordinates.height,
-            AppTheme.Instance.Theme.fillInColor
-        );
-        Raylib.DrawRectangleLines(
-            base.coordinates.x,
-            base.coordinates.y,
-            base.coordinates.width,
-            base.coordinates.height,
             AppTheme.Instance.Theme.borderColor
+            );
+        Raylib.DrawRectangle(
+            base.coordinates.x + AppTheme.Instance.LineWidth,
+            base.coordinates.y + AppTheme.Instance.LineWidth,
+            base.coordinates.width - 2*AppTheme.Instance.LineWidth,
+            base.coordinates.height - 2*AppTheme.Instance.LineWidth,
+            AppTheme.Instance.Theme.fillInColor
         );
         (int x, int y) pos = GetTextStartingPosition();
         Raylib.DrawText(
@@ -90,14 +91,14 @@ public class ButtonObject : UiObject {
             base.coordinates.y,
             base.coordinates.width,
             base.coordinates.height,
-            AppTheme.Instance.Theme.clickedFillInColor
-        );
-        Raylib.DrawRectangleLines(
-            base.coordinates.x,
-            base.coordinates.y,
-            base.coordinates.width,
-            base.coordinates.height,
             AppTheme.Instance.Theme.clickedBorderColor
+            );
+        Raylib.DrawRectangle(
+            base.coordinates.x + AppTheme.Instance.LineWidth,
+            base.coordinates.y + AppTheme.Instance.LineWidth,
+            base.coordinates.width - 2*AppTheme.Instance.LineWidth,
+            base.coordinates.height - 2*AppTheme.Instance.LineWidth,
+            AppTheme.Instance.Theme.clickedFillInColor
         );
         (int x, int y) pos = GetTextStartingPosition();
         Raylib.DrawText(
@@ -111,24 +112,33 @@ public class ButtonObject : UiObject {
 
     public override void Draw() {
         Vector2 v = MouseState.Instance.Position;
-        if (
-            this.coordinates.Inside(
-                MouseState.Instance.PositionX,
-                MouseState.Instance.PositionY
-            )
-        ) {
-            if (MouseState.Instance.ButtonLeftDown) {
-                DrawPressed();
-                this.pressed = true;
-            }
-            else {
-                DrawHovered();
-                this.pressed = false;
-            }
-        }
-        else {
-            DrawNotHovered();
-            this.pressed = false;
-        }
+        Raygui.GuiButton(
+            new Rectangle(
+                base.coordinates.x,
+                base.coordinates.y,
+                base.coordinates.width,
+                base.coordinates.height
+                ),
+            this.text
+        );
+        // if (
+        //     this.coordinates.Inside(
+        //         MouseState.Instance.PositionX,
+        //         MouseState.Instance.PositionY
+        //     )
+        // ) {
+        //     if (MouseState.Instance.ButtonLeftDown) {
+        //         DrawPressed();
+        //         this.pressed = true;
+        //     }
+        //     else {
+        //         DrawHovered();
+        //         this.pressed = false;
+        //     }
+        // }
+        // else {
+        //     DrawNotHovered();
+        //     this.pressed = false;
+        // }
     }
 }

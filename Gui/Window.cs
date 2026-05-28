@@ -1,6 +1,4 @@
-using System.Drawing;
-using System.Runtime.InteropServices;
-using Colorister;
+using raygui_cs;
 
 namespace Gui;
 
@@ -13,7 +11,7 @@ public class Window {
     public string title;
 
     private Pane rootPane;
-    
+
     public Window (
         int width,
         int height,
@@ -35,8 +33,9 @@ public class Window {
 
         SetCorrectRootCoordinateVariables();
         SetCorrectThemeVariables();
-        
+
         this.OpenGuiWindow();
+
     }
 
     void SetCorrectThemeVariables() {
@@ -66,8 +65,9 @@ public class Window {
 
     ~Window() {
         Raylib.CloseWindow();
+        AppTheme.Instance.WindowCreated = false;
     }
-    
+
     void OpenGuiWindow() {
         Raylib.SetConfigFlags(
             ConfigFlags.HighDpiWindow |
@@ -78,16 +78,17 @@ public class Window {
             this.height,
             this.title
         );
+        AppTheme.Instance.WindowCreated = true;
         Rlgl.DisableBackfaceCulling();
         Raylib.SetTargetFPS(fps);
     }
-    
+
     public void DrawProgram() {
         Raylib.BeginDrawing();
-        
+
         Raylib.ClearBackground(AppTheme.Instance.Theme.backgroundColor);
         this.rootPane.Draw();
-        
+
         Raylib.EndDrawing();
     }
 
@@ -109,7 +110,7 @@ public class Window {
         while (!Raylib.WindowShouldClose()) {
             HandleWindowResizing();
             MouseState.Instance.UpdateMouseState();
-            
+
             if (Raylib.IsKeyPressed(KeyboardKey.K)) {
                 if (AppTheme.Instance.Theme == ColorTheme.Kanagawa) {
                     AppTheme.Instance.SetTheme(ColorTheme.LightBlue);
@@ -128,10 +129,12 @@ public class Window {
             //     Color.DarkBlue.G,
             //     (byte)(126 + (100 * Math.Sin(Raylib.GetTime())))
             // );
-            
-            
+
+
             UpdatePanesToNewSizes();
-            DrawProgram();
+			DrawProgram();
+
+
         }
     }
 }

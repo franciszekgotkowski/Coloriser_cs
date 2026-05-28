@@ -12,7 +12,7 @@ public static class ColorExtensions {
 			color.B
 		);
     }
-    
+
     public static List<int> ToIntList(this Color color) {
 	    return new List<int>(){
 		    (int)color.R,
@@ -37,21 +37,37 @@ public static class ColorExtensions {
 	    );
     }
 
-	public static Color Subtract(Color c1, Color c2) {
+	public static Color Subtract(Color c1, Color c2)
+	{
 		if (
 			c1.R < c2.R ||
 			c1.G < c2.G ||
 			c1.B < c2.B ||
 			c1.A < c2.A
-		) {
+		)
+		{
 			throw new ArgumentException();
 		}
-	    return new Color(
-		    c1.R - c2.R,
-		    c1.G - c2.G,
-		    c1.B - c2.B,
-		    c1.A - c2.A
-	    );
-    }
+		return new Color(
+			c1.R - c2.R,
+			c1.G - c2.G,
+			c1.B - c2.B,
+			c1.A - c2.A
+		);
+	}
+
+	public static uint ToUint(this Color color)  {
+		uint R = color.R;
+		uint G = color.G;
+		uint B = color.B;
+		uint A = color.A;
+
+		R = R << 24;
+		G = G << 16;
+		B = B << 8;
+
+		uint Color = R | G | B | A;
+		return Color;
+	}
 
 }

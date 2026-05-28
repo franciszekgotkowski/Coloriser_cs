@@ -15,103 +15,61 @@ public static class UserInterface {
         Debug.Assert(rect.x > 0);
         Debug.Assert(rect.y > 0);
         
-        // Counter clockwise lines
-        Raylib.DrawLine(
+        Raylib.DrawRectangle(
             rect.x,
             rect.y,
-            rect.x,
-            (rect.y+rect.height),
+            rect.width,
+            rect.height,
             AppTheme.Instance.Theme.borderColor
         );
-        Raylib.DrawLine(
-            rect.x,
-            (rect.y+rect.height),
-            (rect.x + rect.width),
-            (rect.y+rect.height),
-            AppTheme.Instance.Theme.borderColor
-        );
-        Raylib.DrawLine(
-            (rect.x + rect.width),
-            (rect.y + rect.height),
-            (rect.x + rect.width),
-            (rect.y),
-            AppTheme.Instance.Theme.borderColor
-        );
-        Raylib.DrawLine(
-            (rect.x + rect.width),
-            (rect.y),
-            (rect.x),
-            (rect.y),
-            AppTheme.Instance.Theme.borderColor
+        Raylib.DrawRectangle(
+            rect.x + AppTheme.Instance.LineWidth,
+            rect.y+ AppTheme.Instance.LineWidth,
+            rect.width - 2*AppTheme.Instance.LineWidth,
+            rect.height - 2*AppTheme.Instance.LineWidth,
+            AppTheme.Instance.Theme.backgroundColor
         );
     }
-    
     
     public static void DrawNamedBox(
         IntRect rect,
         string txt
     ) {
         int textWidth = Raylib.MeasureText(txt, AppTheme.Instance.FontSize);
-        int textOffset = 10;
-        int textBorder = 10;
+        int textOffset = AppTheme.Instance.BorderSize;
+        int textBorder = AppTheme.Instance.BorderSize;
         
-        // Counter clockwise lines
-        Raylib.DrawLine(
+        Raylib.DrawRectangle(
             rect.x,
             rect.y,
-            rect.x,
-            (rect.y+rect.height),
+            rect.width,
+            rect.height,
             AppTheme.Instance.Theme.borderColor
         );
-        Raylib.DrawLine(
-            rect.x,
-            (rect.y+rect.height),
-            (rect.x + rect.width),
-            (rect.y+rect.height),
-            AppTheme.Instance.Theme.borderColor
+        Raylib.DrawRectangle(
+            rect.x + AppTheme.Instance.LineWidth,
+            rect.y+ AppTheme.Instance.LineWidth,
+            rect.width - 2*AppTheme.Instance.LineWidth,
+            rect.height - 2*AppTheme.Instance.LineWidth,
+            AppTheme.Instance.Theme.backgroundColor
         );
-        if (rect.width - (textOffset + textWidth + 2 * textBorder) <= 0) {
-            Raylib.DrawLine(
-                (rect.x + rect.width),
-                (rect.y + rect.height),
-                (rect.x + rect.width),
-                (rect.y + AppTheme.Instance.FontSize/2),
-                AppTheme.Instance.Theme.borderColor
-            );
-        } else {
-            Raylib.DrawLine(
-                (rect.x + rect.width),
-                (rect.y + rect.height),
-                (rect.x + rect.width),
-                (rect.y),
-            AppTheme.Instance.Theme.borderColor
-            );
-        }
+        
+        Raylib.DrawRectangle(
+            rect.x + textOffset,
+            rect.y,
+            textWidth + 2 * textBorder,
+            AppTheme.Instance.FontSize,
+            AppTheme.Instance.Theme.backgroundColor
+            
+        );
     
-    
-        if (rect.width - (textOffset + textWidth + 2 * textBorder) > 0) {
-            Raylib.DrawLine(
-                (rect.x + rect.width),
-                (rect.y),
-                (rect.x + textOffset + textWidth + 2 * textBorder),
-                (rect.y),
-            AppTheme.Instance.Theme.borderColor
-            ); 
-        }
-        Raylib.DrawLine(
-            (rect.x + textOffset),
-            (rect.y),
-            (rect.x),
-            (rect.y),
-            AppTheme.Instance.Theme.borderColor
-        ); 
         Raylib.DrawText(
             txt,
             rect.x + textOffset + textBorder,
             rect.y-AppTheme.Instance.FontSize/2,
             AppTheme.Instance.FontSize,
             AppTheme.Instance.Theme.textColor
-            );
+        );
     }
 
 
