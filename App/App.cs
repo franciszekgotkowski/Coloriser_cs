@@ -7,8 +7,6 @@ namespace Colorister;
 public static class App {
 	public static void Main(string[] args) {
 
-		CubeEdgesData.OrderPointsToMakeCircle(new List<int>{0, 1, 6, 0, 1});
-
 		Pane rootPane = new Pane(
 			new NamedBoxObject("siema")
 		);

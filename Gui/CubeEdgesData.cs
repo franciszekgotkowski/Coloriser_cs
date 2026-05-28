@@ -1,6 +1,5 @@
+using Raylib_cs;
 namespace Gui;
-
-using raygui_cs;
 
 public static class CubeEdgesData
 {
@@ -54,84 +53,59 @@ public static class CubeEdgesData
         new List<int>() {0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 1, 0 }
     };
 
-    public static List<int> OrderPointsToMakeCircle(
-        List<int> list
+    public static List<Color> OrderColorsIntoRing(
+        List<Color> list
     ) {
-        List<List<int>> edges = new List<List<int>>() {
-            new List<int>() {0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0 },
-            new List<int>() {1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0 },
-            new List<int>() {0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0 },
-            new List<int>() {1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0 },
-            new List<int>() {1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1 },
-            new List<int>() {1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0 },
-            new List<int>() {0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0 },
-            new List<int>() {0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1 },
-            new List<int>() {0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1 },
-            new List<int>() {0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0 },
-            new List<int>() {0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1 },
-            new List<int>() {0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 1, 0 }
-        };
-
-        List<int> diagonala = new List<int>();
-        foreach (int i in list) {
-            diagonala.Add(i);
+        if (list.Count < 2) {
+            throw new ArgumentException();
         }
-        while (diagonala.Count > 0) {
-            int t = diagonala[0];
-            diagonala.RemoveAt(0);
-            if (diagonala.Contains(t)) {
-                edges[t][t] += 1;
-            }
-        }
+        List<Color> output = new List<Color>();
         
-        for (int y = 0; y < edges.Count; y++) {
-            for (int x = 0; x < edges[y].Count; x++) {
-                if (edges[y][x] == 1 && !list.Contains(x)) {
-                    edges[y][x] = 0;
+        List<Color> list_cp = new List<Color>();
+        foreach (Color c in list) {
+            list_cp.Add(c);
+        }
+
+        output.Add(list_cp[0]);
+        list_cp.RemoveAt(0);
+
+        while (list_cp.Count > 0) {
+            List<double> distances = new List<double>();
+            foreach (Color c in list_cp) {
+                distances.Add(ColorExtensions.Distance(c, output[output.Count-1]));
+            }
+
+            double currentDistance = 10000.0f;
+            int colorIdx = 0;
+            for (int i = 0; i < distances.Count; i++) {
+                if (distances[i] < currentDistance) {
+                    colorIdx = i;
+                    currentDistance = distances[i];
                 }
             }
-        }
-        
-        List<int> list_cp = new List<int>();
-        foreach (int i in list) {
-            diagonala.Add(i);
+            output.Add(list_cp[colorIdx]);
+            list_cp.RemoveAt(colorIdx);
         }
 
-        
-        //bfs-like algorithm
-        List<int> visited = new List<int>();
-        Queue<int> visitQueue = new Queue<int>();
-        int currentlyIn;
-        while (list_cp.Count != 0) {
-            currentlyIn = list_cp[0];
-            list_cp.RemoveAt(0);
-
-            for (int x = 0; x < edges.Count; x++) {
-                if (edges[currentlyIn][x] != 0) {
-                    visitQueue.Enqueue(edges[currentlyIn][x]);
-                }
-            }
-
-            while (visitQueue.Peek() != list_cp[0] || visitQueue.Peek() != currentlyIn) {
-                if (currentlyIn)
-            }
-        }
-        
-        // foreach (List<int> li in CubeEdgesData.neighbouringEdgesGraph) {
-        //     foreach (int i in li) {
-        //         Console.Write($"{i} ");
-        //     }
-        //     Console.WriteLine();
-        // }
-        // Console.WriteLine();
-        // foreach (List<int> li in edges) {
-        //     foreach (int i in li) {
-        //         Console.Write($"{i} ");
-        //     }
-        //     Console.WriteLine();
-        // }
-
-        return null;
+        return output;
     }
+
+    public static List<List<Color>> CreateTrianglesFromOrderedPoints(
+        List<Color> list
+    ) {
+        List<List<Color>> output = new List<List<Color>>();
+        
+        for (int i = 0; i < list.Count - 2; i++) {
+            List<Color> t = new List<Color>() {
+                list[0],
+                list[i + 1],
+                list[i + 2]
+            };
+            output.Add(t);
+        }
+
+        return output;
+    }
+    
     // tutaj odpali się djikstra i poznaduje wszystkie boku a następnie je wypisze tak żebymmógł zrobic nowy graf
 }

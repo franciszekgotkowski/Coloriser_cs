@@ -132,20 +132,38 @@ public class PlaneScene : Scene3D {
                 Color.RayWhite
             );
         }
+
+        List<Color> orderedPoints = CubeEdgesData.OrderColorsIntoRing(colors);
+        for (int i = 0; i < orderedPoints.Count; i++) {
+            int from = i % orderedPoints.Count;
+            int to = (i + 1) % orderedPoints.Count;
+            
+            Raylib.DrawLine3D(
+                orderedPoints[from].ToCubePosition(cube),
+                orderedPoints[to].ToCubePosition(cube),
+                AppTheme.Instance.Theme.borderColor
+            );
+        }
+
+        List<List<Color>> triangles = CubeEdgesData.CreateTrianglesFromOrderedPoints(orderedPoints);
+        
         Rlgl.Begin(DrawMode.Triangles);
-        foreach (Color col in colors) {
-            Vector3 worldspacePosition = col.ToCubePosition(cube);
-            Rlgl.Color4ub(
-                col.R,
-                col.G,
-                col.B,
-                byte.MaxValue
-            );
-            Rlgl.Vertex3f(
-                worldspacePosition.X,
-                worldspacePosition.Y,
-                worldspacePosition.Z
-            );
+        foreach (List<Color> l in triangles) {
+            foreach (Color col in l) {
+                Vector3 worldspacePosition = col.ToCubePosition(cube);
+                Rlgl.Color4ub(
+                    col.R,
+                    col.G,
+                    col.B,
+                    byte.MaxValue
+                );
+                Rlgl.Vertex3f(
+                    worldspacePosition.X,
+                    worldspacePosition.Y,
+                    worldspacePosition.Z
+                );
+                
+            }
         }
         Rlgl.End();
         Raylib.EndMode3D();
@@ -168,7 +186,7 @@ public class PlaneScene : Scene3D {
         Raylib.BeginMode3D(camera.camera);
         cube.Draw();
         // foreach (Triangle3D triangle3D in triangles) {
-            // triangle3D.Draw();
+        // triangle3D.Draw();
         // }
         Raylib.EndMode3D();
 

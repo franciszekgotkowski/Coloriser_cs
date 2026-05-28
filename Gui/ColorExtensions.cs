@@ -56,6 +56,14 @@ public static class ColorExtensions {
 		);
 	}
 
+	public static double Distance(Color c1, Color c2) {
+		int diffR = c1.R - c2.R;
+		int diffG = c1.G - c2.G;
+		int diffB = c1.B - c2.B;
+
+		return Math.Sqrt(diffR * diffR + diffG * diffG + diffB * diffB);
+	}
+
 	public static uint ToUint(this Color color)  {
 		uint R = color.R;
 		uint G = color.G;
