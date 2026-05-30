@@ -1,29 +1,47 @@
-using System.Runtime.CompilerServices;
 using Raylib_cs;
 
 namespace Gui;
 
-public class ImageCommunication {
-    
-    private ImageCommunication() {}
+
+
+public class ImageCommunication
+{
+
+    private ImageCommunication() { }
 
     public static ImageCommunication Instance = new ImageCommunication();
 
-    public string FilePath {
-        set {
-            this.FilePath = value;
+    public bool modified = false;
+    public event DisplayImageEvent onUpdate;
 
-            if (this.image.Data != ) {
-                Raylib.UnloadImage(image);
-                Raylib.UnloadTexture(imageTexture);
+    private string _FilePath;
+    public string FilePath {
+        get {
+            return _FilePath;
+        }
+        set {
+            _FilePath = value;
+            if (image != null) {
+                Raylib.UnloadImage(image.Value);
             }
 
-            this.image = Raylib.LoadImage(value);
+            modified = true;
+            image = Raylib.LoadImage(_FilePath);
+            if (!image.HasValue) {
+                image = null;
+            }
+
+            onUpdate?.Invoke();
+
         }
     }
 
-    public Image image;
-    public Texture2D imageTexture;
+    public Image? image;
 
+    ~ImageCommunication() {
+        if (image != null) {
+            Raylib.UnloadImage(image.Value);
+        }
+    }
 
 }

@@ -118,6 +118,13 @@ public class Window {
                     AppTheme.Instance.SetTheme(ColorTheme.Kanagawa);
                 }
             }
+            if (Raylib.IsKeyPressed(KeyboardKey.N)) {
+                ImageCommunication.Instance.FilePath = "~/Pictures/images.jpeg";
+            }
+            if (Raylib.IsKeyPressed(KeyboardKey.M)) {
+                // ImageCommunication.Instance.FilePath = "../../../../../../v9.png";
+                ImageCommunication.Instance.FilePath = "/home/fg/images.jpeg";
+            }
 
             // EdgesComunication.Instance.colorList[0] = new Color(
             //     Color.DarkBlue.R,
