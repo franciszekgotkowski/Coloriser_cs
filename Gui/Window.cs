@@ -118,11 +118,16 @@ public class Window {
                     AppTheme.Instance.SetTheme(ColorTheme.Kanagawa);
                 }
             }
-            if (Raylib.IsKeyPressed(KeyboardKey.N)) {
-                ImageCommunication.Instance.FilePath = "/home/fg/v9.png";
+
+            string home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+
+
+            if (Raylib.IsKeyPressed(KeyboardKey.N))
+            {
+                ImageCommunication.Instance.FilePath = Path.Combine(home, "v9.png");
             }
             if (Raylib.IsKeyPressed(KeyboardKey.M)) {
-                ImageCommunication.Instance.FilePath = "/home/fg/images.jpeg";
+                ImageCommunication.Instance.FilePath = Path.Combine(home, "images.jpeg");
             }
             if (Raylib.IsKeyPressed(KeyboardKey.X)) {
                 ImageCommunication.Instance.FilePath = "";

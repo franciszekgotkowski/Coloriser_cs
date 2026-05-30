@@ -15,9 +15,9 @@ public class DisplayImageObject : UiObject {
 
     public DisplayImageObject() {
         renderTexture = new RenderTexture(
-                base.coordinates.width,
-                base.coordinates.height
-                );
+            base.coordinates.width,
+            base.coordinates.height
+        );
 
         ImageCommunication.Instance.onUpdate += LoadFreshImage;
     }
@@ -35,10 +35,10 @@ public class DisplayImageObject : UiObject {
 
     private float calculateScaleFactorForImageTexture() {
         if (
-                image == null || 
-                image.Value.Width == 0 ||
-                image.Value.Height == 0
-            ) {
+            image == null || 
+            image.Value.Width == 0 ||
+            image.Value.Height == 0
+        ) {
             return 1.0f;
         }
 
@@ -71,18 +71,20 @@ public class DisplayImageObject : UiObject {
 
     private void LoadFreshImage() {
         if (ImageCommunication.Instance.image != null) {
+            if (image != null) {
+                Raylib.UnloadImage(image.Value);
+            }
             image = Raylib.ImageCopy(ImageCommunication.Instance.image.Value);
-            // ResizeImage();
         }
         UpdateTexture();
     }
 
     public override void Resize(
-            int xPos,
-            int yPos,
-            int width,
-            int height
-            ) {
+        int xPos,
+        int yPos,
+        int width,
+        int height
+    ) {
 
         if (base.coordinates != null) {
             oldWidth = base.coordinates.width;
@@ -91,10 +93,10 @@ public class DisplayImageObject : UiObject {
         
         base.Resize(xPos, yPos, width, height);
         if (renderTexture != null) {
-            this.renderTexture.Resize(
-                    width,
-                    height
-                    );
+            renderTexture.Resize(
+                width,
+                height
+            );
         }
     }
 
@@ -104,58 +106,62 @@ public class DisplayImageObject : UiObject {
 
         renderTexture.Activate();
         Raylib.ClearBackground(
-                AppTheme.Instance.Theme.backgroundColor
-                );
+            AppTheme.Instance.Theme.backgroundColor
+        );
 
         if (imageTexture.Id != 0) {
             float scale = calculateScaleFactorForImageTexture();
             float newWidth = imageTexture.Width * scale;
             float newHeight = imageTexture.Height * scale;
             Raylib.DrawTexturePro(
-                    imageTexture,
-                    new Rectangle (
-                        0.0f,
-                        0.0f,
-                        imageTexture.Width,
-                        imageTexture.Height
-                        ),
-                    new Rectangle (
-                        0,
-                        0,
-                        newWidth,
-                        newHeight
-                        ),
-                    new Vector2(
-                        -(coordinates.width - newWidth)/2,
-                        -(coordinates.height - newHeight)/2
-                        ),
+                imageTexture,
+                new Rectangle (
                     0.0f,
-                    Color.White
-                    );
+                    0.0f,
+                    imageTexture.Width,
+                    imageTexture.Height
+                ),
+                new Rectangle (
+                    0,
+                    0,
+                    newWidth,
+                    newHeight
+                ),
+                new Vector2(
+                    -(coordinates.width - newWidth)/2,
+                    -(coordinates.height - newHeight)/2
+                ),
+                0.0f,
+                Color.White
+            );
 
         }
 
         renderTexture.Deactivate();
 
         Raylib.DrawTextureRec(
-                renderTexture.renderTexture.Texture,
-                new Rectangle(
-                    0.0f,
-                    0.0f,
-                    coordinates.width,
-                    -coordinates.height
-                    ),
-                new Vector2(
-                    base.coordinates.x,
-                    base.coordinates.y
-                    ),
-                Color.White
-                );
+            renderTexture.renderTexture.Texture,
+            new Rectangle(
+                0.0f,
+                0.0f,
+                coordinates.width,
+                -coordinates.height
+            ),
+            new Vector2(
+                base.coordinates.x,
+                base.coordinates.y
+            ),
+            Color.White
+        );
     }
 
     ~DisplayImageObject() {
         if (this.imageTexture.Id != 0) {
             Raylib.UnloadTexture(this.imageTexture);
+        }
+
+        if (image != null)  {
+            Raylib.UnloadImage(image.Value);
         }
 
         ImageCommunication.Instance.onUpdate -= LoadFreshImage;
