@@ -119,24 +119,14 @@ public class Window {
                 }
             }
             if (Raylib.IsKeyPressed(KeyboardKey.N)) {
-                ImageCommunication.Instance.FilePath = "~/Pictures/images.jpeg";
+                ImageCommunication.Instance.FilePath = "/home/fg/v9.png";
             }
             if (Raylib.IsKeyPressed(KeyboardKey.M)) {
-                // ImageCommunication.Instance.FilePath = "../../../../../../v9.png";
                 ImageCommunication.Instance.FilePath = "/home/fg/images.jpeg";
             }
-
-            // EdgesComunication.Instance.colorList[0] = new Color(
-            //     Color.DarkBlue.R,
-            //     Color.DarkBlue.G,
-            //     (byte)(126 + (100 * Math.Sin(Raylib.GetTime())))
-            // );
-            // ColorComunication.Instance.colorList[0] = new Color(
-            //     Color.DarkBlue.R,
-            //     Color.DarkBlue.G,
-            //     (byte)(126 + (100 * Math.Sin(Raylib.GetTime())))
-            // );
-
+            if (Raylib.IsKeyPressed(KeyboardKey.X)) {
+                ImageCommunication.Instance.FilePath = "";
+            }
 
             UpdatePanesToNewSizes();
 			DrawProgram();

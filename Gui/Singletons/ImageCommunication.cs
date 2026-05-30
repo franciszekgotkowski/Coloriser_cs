@@ -11,7 +11,6 @@ public class ImageCommunication
 
     public static ImageCommunication Instance = new ImageCommunication();
 
-    public bool modified = false;
     public event DisplayImageEvent onUpdate;
 
     private string _FilePath;
@@ -25,7 +24,6 @@ public class ImageCommunication
                 Raylib.UnloadImage(image.Value);
             }
 
-            modified = true;
             image = Raylib.LoadImage(_FilePath);
             if (!image.HasValue) {
                 image = null;
