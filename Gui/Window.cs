@@ -10,21 +10,15 @@ public class Window {
 
     public string title;
 
-    private Pane rootPane;
+    private Pane? rootPane;
 
     public Window (
         int width,
         int height,
         int fps,
-        string title,
-        Pane rootPane
+        string title
+        // Pane rootPane
     ) {
-
-        if (rootPane == null) {
-            throw new Exception();
-        }
-
-        this.rootPane = rootPane;
 
         this.width = width;
         this.height = height;
@@ -44,7 +38,7 @@ public class Window {
     }
 
     void SetCorrectRootCoordinateVariables() {
-        this.rootPane.SetNewCoordinateVariables(
+        this.rootPane?.SetNewCoordinateVariables(
             AppTheme.Instance.BorderSize,
             AppTheme.Instance.BorderSize,
             this.width - 2 * AppTheme.Instance.BorderSize,
@@ -107,6 +101,9 @@ public class Window {
     }
 
     public void Loop() {
+        if (rootPane == null) {
+            throw new Exception();
+        }
         while (!Raylib.WindowShouldClose()) {
             HandleWindowResizing();
             MouseState.Instance.UpdateMouseState();
@@ -138,5 +135,11 @@ public class Window {
 
 
         }
+    }
+
+    public void AssignRoot(
+        Layout layout
+    ) {
+        rootPane = layout;
     }
 }

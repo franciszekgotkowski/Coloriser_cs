@@ -14,11 +14,11 @@ public class Pane {
     public int percentOfCanvasForUiObject = 50;
 
     public Pane(
+        UiObject? uiObject = null,
         int xPos = 0,
         int yPos = 0,
         int width = 0,
-        int heigth = 0,
-        UiObject? uiObject = null
+        int heigth = 0
     ) {
         this.uiObject = uiObject;
         this.SetNewCoordinateVariables(
@@ -28,16 +28,6 @@ public class Pane {
             heigth
         ); 
     }
-
-    public Pane(
-        UiObject? uiObject = null
-    ) : this(
-        0,
-        0,
-        0,
-        0,
-        uiObject
-    ) { }
 
     // If there is some window resize or function initialization this function will be called
     // It (based on the data it recieved) sets new coordinates for position and child width and height. This function will be used recursively for updating UI

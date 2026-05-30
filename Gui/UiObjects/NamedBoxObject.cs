@@ -10,9 +10,9 @@ public class NamedBoxObject : UiObject {
         get {
             return new IntRect(
                 base.coordinates.x + AppTheme.Instance.BorderSize,
-                base.coordinates.y + AppTheme.Instance.BorderSize,
+                base.coordinates.y + AppTheme.Instance.BorderSize + AppTheme.Instance.FontSize / 2,
                 base.coordinates.width - 2 * AppTheme.Instance.BorderSize,
-                base.coordinates.height - 2 * AppTheme.Instance.BorderSize
+                base.coordinates.height - 2 * AppTheme.Instance.BorderSize - AppTheme.Instance.FontSize/2
             );
         }
     }
@@ -76,10 +76,14 @@ public class NamedBoxObject : UiObject {
         );
         if (this.guiObject != null) {
             this.guiObject.Resize(
-                xPos + AppTheme.Instance.BorderSize,
-                yPos + AppTheme.Instance.BorderSize,
-                width - 2 * AppTheme.Instance.BorderSize,
-                height - 2 * AppTheme.Instance.BorderSize
+                canvasCoordinates.x,
+                canvasCoordinates.y,
+                canvasCoordinates.width,
+                canvasCoordinates.height
+                // xPos + AppTheme.Instance.BorderSize,
+                // yPos + AppTheme.Instance.BorderSize,
+                // width - 2 * AppTheme.Instance.BorderSize,
+                // height - 2 * AppTheme.Instance.BorderSize
             );
         } 
     }
