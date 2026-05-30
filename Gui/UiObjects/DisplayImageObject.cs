@@ -33,7 +33,7 @@ public class DisplayImageObject : UiObject {
         }
     }
 
-    private float calculateScaleFactorForImage() {
+    private float calculateScaleFactorForImageTexture() {
         if (
                 image == null || 
                 image.Value.Width == 0 ||
@@ -42,8 +42,8 @@ public class DisplayImageObject : UiObject {
             return 1.0f;
         }
 
-        float scaleX = (float)base.coordinates.width / (float)image.Value.Width;
-        float scaleY = (float)base.coordinates.height / (float)image.Value.Height;
+        float scaleX = (float)base.coordinates.width / (float)imageTexture.Width;
+        float scaleY = (float)base.coordinates.height / (float)imageTexture.Height;
 
         if (scaleX > 1.0f || scaleY > 1.0f) {
             if (scaleX > scaleY) {
@@ -60,19 +60,19 @@ public class DisplayImageObject : UiObject {
         }
     }
 
-    private unsafe void ResizeImage() {
-            if (image == null) return;
-
-            float scale = calculateScaleFactorForImage();
-            Image image1 = image.Value;
-            Raylib.ImageResize(&image1, (int)(scale*image.Value.Width), (int)(scale*image.Value.Height));
-            image = image1;
-    }
+    // private unsafe void ResizeImage() {
+    //         if (image == null) return;
+    //
+    //         float scale = calculateScaleFactorForImage();
+    //         Image image1 = image.Value;
+    //         Raylib.ImageResize(&image1, (int)(scale*image.Value.Width), (int)(scale*image.Value.Height));
+    //         image = image1;
+    // }
 
     private void LoadFreshImage() {
         if (ImageCommunication.Instance.image != null) {
             image = Raylib.ImageCopy(ImageCommunication.Instance.image.Value);
-            ResizeImage();
+            // ResizeImage();
         }
         UpdateTexture();
     }
@@ -96,17 +96,6 @@ public class DisplayImageObject : UiObject {
                     height
                     );
         }
-
-        if (
-                (renderTexture != null &&
-                 imageTexture.Id != 0)
-                &&
-                (oldWidth != base.coordinates.width ||
-                 oldHeight != base.coordinates.height)
-            ) {
-            LoadFreshImage();
-        }
-
     }
 
 
@@ -115,17 +104,35 @@ public class DisplayImageObject : UiObject {
 
         renderTexture.Activate();
         Raylib.ClearBackground(
-                // AppTheme.Instance.Theme.backgroundColor
-                Color.Red
+                AppTheme.Instance.Theme.backgroundColor
                 );
 
         if (imageTexture.Id != 0) {
-            Raylib.DrawTexture(
+            float scale = calculateScaleFactorForImageTexture();
+            float newWidth = imageTexture.Width * scale;
+            float newHeight = imageTexture.Height * scale;
+            Raylib.DrawTexturePro(
                     imageTexture,
-                    (coordinates.width - imageTexture.Width)/2,
-                    (coordinates.height - imageTexture.Height)/2,
+                    new Rectangle (
+                        0.0f,
+                        0.0f,
+                        imageTexture.Width,
+                        imageTexture.Height
+                        ),
+                    new Rectangle (
+                        0,
+                        0,
+                        newWidth,
+                        newHeight
+                        ),
+                    new Vector2(
+                        -(coordinates.width - newWidth)/2,
+                        -(coordinates.height - newHeight)/2
+                        ),
+                    0.0f,
                     Color.White
                     );
+
         }
 
         renderTexture.Deactivate();
@@ -150,5 +157,7 @@ public class DisplayImageObject : UiObject {
         if (this.imageTexture.Id != 0) {
             Raylib.UnloadTexture(this.imageTexture);
         }
+
+        ImageCommunication.Instance.onUpdate -= LoadFreshImage;
     }
 }

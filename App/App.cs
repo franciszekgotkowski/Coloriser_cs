@@ -22,20 +22,27 @@ public static class App {
                 rootPane
                 );
 
-        NamedBoxObject tenZTextura = new NamedBoxObject("mam render texture w sobie");
+
+        NamedBoxObject tenZSzescianem = new NamedBoxObject(
+                "wizualizuje rzut na plaszyzne"
+                );
 
 
         rootPane.AssignChildPane(
-                new Pane(tenZTextura),
+                new Pane(tenZSzescianem),
                 40,
                 Direction.RIGHT
                 );
 
-        DisplayImageObject imageObject = new DisplayImageObject();
+        NamedBoxObject tenZeZdieciem = new NamedBoxObject(
+                "wyswietlam zdiecie",
+                new DisplayImageObject()
+                );
 
         rootPane.childPane.AssignChildPane(
                 new Pane(
-                    imageObject
+                    tenZeZdieciem
+                    // imageObject
                     // new ButtonObject(
                     // 	"Jestem trzeci!"
                     // )
@@ -52,7 +59,7 @@ public static class App {
                 );
         vis.AddScene3D(plane);
 
-        tenZTextura.AddGuiObject( vis );
+        tenZSzescianem.AddGuiObject( vis );
         AppTheme.Instance.SetTheme(ColorTheme.Kanagawa);
 
         ColorComunication.Instance.colorList[0] = new Color(20, 100, 40);
