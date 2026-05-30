@@ -4,6 +4,7 @@ using Raylib_cs;
 
 namespace Colorister;
 
+
 public static class App {
     public static void Main(string[] args) {
 
