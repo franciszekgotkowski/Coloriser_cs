@@ -70,7 +70,7 @@ public class Window {
 
     void OpenGuiWindow() {
         Raylib.SetConfigFlags(
-            ConfigFlags.HighDpiWindow |
+            // ConfigFlags.HighDpiWindow |
             ConfigFlags.ResizableWindow
         );
         Raylib.InitWindow(
