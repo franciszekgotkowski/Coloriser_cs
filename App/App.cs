@@ -15,7 +15,7 @@ public static class App {
                 "Ciszarp"
                 );
 
-        window.AssignRoot(
+        window.SetLayout(
             new PlaneLayout()
         );
 

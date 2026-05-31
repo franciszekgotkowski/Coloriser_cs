@@ -2,13 +2,17 @@ namespace Gui;
 
 public class PlaneLayout : Layout {
 
-    public PlaneLayout() : base () {
+    public PlaneLayout() : base (
+            new NamedBoxObject("siema")
+            ) {
 
-        NamedBoxObject siemabox = new NamedBoxObject("siema");
-        siemabox.AddGuiObject(new ColorControllingObject());
-        Pane rootPane = new Pane(
-                siemabox
+        NamedBoxObject siemabox = (NamedBoxObject)base.uiObject;
+        siemabox.AddGuiObject(
+                new ColorControllingObject()
                 );
+        // Pane rootPane = new Pane(
+        //         siemabox
+        //         );
 
 
         NamedBoxObject tenZSzescianem = new NamedBoxObject(
@@ -16,7 +20,7 @@ public class PlaneLayout : Layout {
                 );
 
 
-        rootPane.AssignChildPane(
+        AssignChildPane(
                 new Pane(tenZSzescianem),
                 40,
                 Direction.RIGHT
@@ -27,7 +31,7 @@ public class PlaneLayout : Layout {
                 new DisplayImageObject()
                 );
 
-        rootPane.childPane.AssignChildPane(
+        childPane.AssignChildPane(
                 new Pane(
                     tenZeZdieciem
                     // imageObject
@@ -50,7 +54,5 @@ public class PlaneLayout : Layout {
         tenZSzescianem.AddGuiObject( vis );
 
 
-        childPane = rootPane;
-        percentOfCanvasForUiObject = 0;
     }
 }
