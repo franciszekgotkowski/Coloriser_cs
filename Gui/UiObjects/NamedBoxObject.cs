@@ -8,15 +8,6 @@ public class NamedBoxObject : UiObject {
 
     IntRect canvasCoordinates {
         get {
-            // return new IntRect(
-            //     base.coordinates.x + AppTheme.Instance.BorderSize,
-            //     base.coordinates.y - (AppTheme.Instance.BorderSize - AppTheme.Instance.FontSize),
-            //     // base.coordinates.y + AppTheme.Instance.BorderSize + AppTheme.Instance.FontSize/ 2,
-            //     base.coordinates.width - 2 * AppTheme.Instance.BorderSize,
-            //     base.coordinates.height - (AppTheme.Instance.BorderSize - AppTheme.Instance.FontSize)
-            //     // base.coordinates.height - (AppTheme.Instance.FontSize - AppTheme.Instance.BorderSize)
-            //     // base.coordinates.height - 2 * AppTheme.Instance.BorderSize - AppTheme.Instance.FontSize/2
-            // );
             return new IntRect(
                 base.coordinates.x + AppTheme.Instance.BorderSize,
                 base.coordinates.y - AppTheme.Instance.BorderSize + AppTheme.Instance.FontSize,
@@ -89,10 +80,6 @@ public class NamedBoxObject : UiObject {
                 canvasCoordinates.y,
                 canvasCoordinates.width,
                 canvasCoordinates.height
-                // xPos + AppTheme.Instance.BorderSize,
-                // yPos + AppTheme.Instance.BorderSize,
-                // width - 2 * AppTheme.Instance.BorderSize,
-                // height - 2 * AppTheme.Instance.BorderSize
             );
         } 
     }

@@ -13,6 +13,10 @@ public class ColorControllingObject : UiObject {
     private bool editMode = false;
     private string home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
+    int dropdownIndex =  0;
+    string dropdownBoxString = "Raz;Dwa;Trzy";
+    bool dropdownOpen = false;
+
     public override void Draw() {
 
         bool clicked = Raygui.GuiTextBox(
@@ -33,7 +37,7 @@ public class ColorControllingObject : UiObject {
         }
 
         if (
-            clicked
+                clicked
            ) {
             editMode = !editMode;
         }
@@ -78,6 +82,22 @@ public class ColorControllingObject : UiObject {
                     0.0f,
                     255.0f
                     ));
+
+        
+        if (Raygui.GuiDropdownBox(
+                    new Rectangle (
+                        this.coordinates.x,
+                        this.coordinates.y,
+                        this.coordinates.width,
+                        this.coordinates.height/10
+                        ),
+                    dropdownBoxString,
+                    ref dropdownIndex,
+                    dropdownOpen))
+        {
+            dropdownOpen = !dropdownOpen; // toggle on click
+        }
+
 
         ColorComunication.Instance.colorList[0] = new Color(R, G, B, Byte.MaxValue);
         EdgesComunication.Instance.colorList[0] = new Color(R, G, B, Byte.MaxValue);
