@@ -9,8 +9,8 @@ public static class App {
     public static void Main(string[] args) {
 
         Window window = new Window(
-                800,
-                600,
+                1400,
+                900,
                 60,
                 "Ciszarp"
                 );

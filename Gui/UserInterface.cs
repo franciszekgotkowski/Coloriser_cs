@@ -66,7 +66,7 @@ public static class UserInterface {
         Raylib.DrawText(
             txt,
             rect.x + textOffset + textBorder,
-            rect.y-AppTheme.Instance.FontSize/2,
+            rect.y - AppTheme.Instance.BorderSize,
             AppTheme.Instance.FontSize,
             AppTheme.Instance.Theme.textColor
         );
