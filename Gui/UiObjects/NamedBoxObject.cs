@@ -10,7 +10,7 @@ public class NamedBoxObject : UiObject {
         get {
             return new IntRect(
                 base.coordinates.x + AppTheme.Instance.BorderSize,
-                base.coordinates.y + AppTheme.Instance.BorderSize + AppTheme.Instance.FontSize / 2,
+                base.coordinates.y + AppTheme.Instance.BorderSize + AppTheme.Instance.FontSize/ 2,
                 base.coordinates.width - 2 * AppTheme.Instance.BorderSize,
                 base.coordinates.height - 2 * AppTheme.Instance.BorderSize - AppTheme.Instance.FontSize/2
             );
