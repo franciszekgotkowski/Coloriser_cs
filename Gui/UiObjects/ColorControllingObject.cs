@@ -8,19 +8,14 @@ public class ColorControllingObject : UiObject {
     byte G = 125;
     byte B = 125;
 
-    string lastPath;
-
-    string text = "";
-    bool editMode = false;
-
-    string home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+    private string lastPath;
+    private string text = "";
+    private bool editMode = false;
+    private string home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
     public override void Draw() {
 
         bool clicked = Raygui.GuiTextBox(
-                // new Rectangle (
-                //     100, 100, 200, 30
-                //     ),
                 new Rectangle(
                     this.coordinates.x + this.coordinates.width*2/10,
                     this.coordinates.y+ this.coordinates.height*2/10,
@@ -49,7 +44,7 @@ public class ColorControllingObject : UiObject {
                         this.coordinates.x + this.coordinates.width*2/10,
                         this.coordinates.y+ this.coordinates.height*5/10,
                         this.coordinates.width*6/10,
-                        20
+                        AppTheme.Instance.FontSize *3/2
                         ),
                     "0",
                     "255",
@@ -62,7 +57,7 @@ public class ColorControllingObject : UiObject {
                         this.coordinates.x + this.coordinates.width*2/10,
                         this.coordinates.y+ this.coordinates.height*6/10,
                         this.coordinates.width*6/10,
-                        20
+                        AppTheme.Instance.FontSize *3/2
                         ),
                     "0",
                     "255",
@@ -75,7 +70,7 @@ public class ColorControllingObject : UiObject {
                         this.coordinates.x + this.coordinates.width*2/10,
                         this.coordinates.y+ this.coordinates.height*7/10,
                         this.coordinates.width*6/10,
-                        20
+                        AppTheme.Instance.FontSize *3/2
                         ),
                     "0",
                     "255",
