@@ -10,7 +10,7 @@ public class Window {
 
     public string title;
 
-    private Pane? rootPane;
+    private Layout? layout;
 
     public Window (
         int width,
@@ -38,7 +38,7 @@ public class Window {
     }
 
     void SetCorrectRootCoordinateVariables() {
-        this.rootPane?.SetNewCoordinateVariables(
+        this.layout?.SetNewCoordinateVariables(
             AppTheme.Instance.BorderSize,
             AppTheme.Instance.BorderSize,
             this.width - 2 * AppTheme.Instance.BorderSize,
@@ -81,14 +81,14 @@ public class Window {
         Raylib.BeginDrawing();
 
         Raylib.ClearBackground(AppTheme.Instance.Theme.backgroundColor);
-        this.rootPane.Draw();
+        this.layout.Draw();
 
         Raylib.EndDrawing();
     }
 
     public void UpdatePanesToNewSizes() {
         this.SetCorrectRootCoordinateVariables();
-        this.rootPane.ResetCoordinateVariables();
+        this.layout.ResetCoordinateVariables();
     }
 
     void HandleWindowResizing() {
@@ -101,7 +101,7 @@ public class Window {
     }
 
     public void Loop() {
-        if (rootPane == null) {
+        if (layout == null) {
             throw new Exception();
         }
         while (!Raylib.WindowShouldClose()) {
@@ -137,9 +137,9 @@ public class Window {
         }
     }
 
-    public void AssignRoot(
+    public void SetLayout(
         Layout layout
     ) {
-        rootPane = layout;
+        this.layout = layout;
     }
 }
