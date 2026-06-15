@@ -2,53 +2,54 @@ namespace Gui;
 
 public class PlaneLayout : Layout {
 
-    public PlaneLayout() : base (
-            new NamedBoxObject("siema")
-            ) {
+    public PlaneLayout(
+        Window window
+    ) : base (
+        new NamedBoxObject("Kolorki")
+    ) {
 
         NamedBoxObject siemabox = (NamedBoxObject)base.uiObject;
         siemabox.AddGuiObject(
-                new ColorControllingObject()
-                );
-        // Pane rootPane = new Pane(
-        //         siemabox
-        //         );
+            new ColorControllingObject(
+                window
+            )
+        );
 
 
         NamedBoxObject tenZSzescianem = new NamedBoxObject(
-                "wizualizuje rzut na plaszyzne"
-                );
+            "wizualizuje rzut na plaszyzne"
+        );
 
 
         AssignChildPane(
-                new Pane(tenZSzescianem),
-                40,
-                Direction.RIGHT
-                );
+            new Pane(tenZSzescianem),
+            40,
+            Direction.RIGHT
+        );
 
         NamedBoxObject tenZeZdieciem = new NamedBoxObject(
-                "wyswietlam zdiecie",
-                new DisplayImageObject()
-                );
+            "wyswietlam zdiecie",
+            new DisplayImageObject()
+        );
 
         childPane.AssignChildPane(
-                new Pane(
-                    tenZeZdieciem
-                    // imageObject
-                    // new ButtonObject(
-                    // 	"Jestem trzeci!"
-                    // )
-                    ),
-                50,
-                Direction.DOWN
-                );
+            new Pane(
+                tenZeZdieciem
+                // imageObject
+                // new ButtonObject(
+                // 	"Jestem trzeci!"
+                // )
+            ),
+            50,
+            Direction.DOWN
+        );
 
 
         Visualisation3DObject vis = new Visualisation3DObject();
         PlaneScene plane = new PlaneScene(
-                vis.camera,
-                vis.renderTexture
-                );
+            vis.camera,
+            vis.renderTexture
+        );
         vis.AddScene3D(plane);
 
         tenZSzescianem.AddGuiObject( vis );

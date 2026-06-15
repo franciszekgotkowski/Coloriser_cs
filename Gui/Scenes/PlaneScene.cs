@@ -22,8 +22,8 @@ public class PlaneScene : Scene3D {
     ) {
         cube = new Cube3D();
 
-        ColorComunication.Instance.colorList = new Color[3];
-        EdgesComunication.Instance.colorList = new Color[4];
+        ColorCommunication.Instance.InitializeList(3);
+        EdgesComunication.Instance.InitializeList(4);
 
         colorPoints[0] = new ColorPoint3D(
             base.camera,

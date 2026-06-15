@@ -12,7 +12,7 @@ public class NamedBoxObject : UiObject {
                 base.coordinates.x + AppTheme.Instance.BorderSize,
                 base.coordinates.y - AppTheme.Instance.BorderSize + AppTheme.Instance.FontSize,
                 base.coordinates.width - 2 * AppTheme.Instance.BorderSize,
-                base.coordinates.height - 2 * AppTheme.Instance.BorderSize - AppTheme.Instance.FontSize
+                base.coordinates.height -  AppTheme.Instance.BorderSize - AppTheme.Instance.FontSize
             );
         }
     }

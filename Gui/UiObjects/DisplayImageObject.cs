@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Numerics;
 using Raylib_cs;
 
@@ -6,7 +7,8 @@ namespace Gui;
 public delegate void DisplayImageEvent();
 
 public class DisplayImageObject : UiObject {
-    private Image? image;
+    private Image? baseImage;
+    private Image? drawnImage;
     private Texture2D imageTexture;
     private RenderTexture renderTexture;
 
@@ -20,24 +22,25 @@ public class DisplayImageObject : UiObject {
         );
 
         ImageCommunication.Instance.onUpdate += LoadFreshImage;
+        ColorCommunication.Instance.onUpdate += MakeNewColoredImage;
     }
 
     private void UpdateTexture() {
-        if (image != null) {
+        if (drawnImage != null) {
             if (imageTexture.Id != 0) {
                 Raylib.UnloadTexture(imageTexture);
             }
             imageTexture = Raylib.LoadTextureFromImage(
-                image.Value
+                drawnImage.Value
             );
         }
     }
 
     private float calculateScaleFactorForImageTexture() {
         if (
-            image == null || 
-            image.Value.Width == 0 ||
-            image.Value.Height == 0
+            baseImage == null ||
+            baseImage.Value.Width == 0 ||
+            baseImage.Value.Height == 0
         ) {
             return 1.0f;
         }
@@ -60,21 +63,75 @@ public class DisplayImageObject : UiObject {
         }
     }
 
-    // private unsafe void ResizeImage() {
-    //         if (image == null) return;
-    //
-    //         float scale = calculateScaleFactorForImage();
-    //         Image image1 = image.Value;
-    //         Raylib.ImageResize(&image1, (int)(scale*image.Value.Width), (int)(scale*image.Value.Height));
-    //         image = image1;
-    // }
+    private void MakeNewColoredImage() {
+        if (drawnImage != null) {
+            Raylib.UnloadImage(drawnImage.Value);
+        }
+        Debug.Assert(baseImage != null);
+        drawnImage = Raylib.ImageCopy(baseImage.Value);
+
+        unsafe
+        {
+            byte* data = (byte*)drawnImage.Value.Data;
+
+            if (drawnImage.Value.Format == PixelFormat.UncompressedR8G8B8A8) {
+                for (int i = 0; i < drawnImage.Value.Width * drawnImage.Value.Height; i++) {
+
+                    ColorInt currentColor = new ColorInt(
+                        (uint)data[4 * i] + 0,
+                        (uint)data[4 * i] + 1,
+                        (uint)data[4 * i] + 2
+                    );
+
+                    Color projectedColor = currentColor.Project(
+                        ColorCommunication.Instance.colorList[0],
+                        ColorCommunication.Instance.colorList[1],
+                        ColorCommunication.Instance.colorList[2]
+                    );
+
+                    data[4 * i + 0] = projectedColor.R;
+                    data[4 * i + 1] = projectedColor.G;
+                    data[4 * i + 2] = projectedColor.B;
+                    // data[4 * i + 3] = byte.MaxValue;
+                }
+            } else if (drawnImage.Value.Format == PixelFormat.UncompressedR8G8B8) {
+                    for (int i = 0; i < drawnImage.Value.Width * drawnImage.Value.Height; i++) {
+
+                        ColorInt currentColor = new ColorInt(
+                            (uint)data[3 * i] + 0,
+                            (uint)data[3 * i] + 1,
+                            (uint)data[3 * i] + 2
+                        );
+
+                        Color projectedColor = currentColor.Project(
+                            ColorCommunication.Instance.colorList[0],
+                            ColorCommunication.Instance.colorList[1],
+                            ColorCommunication.Instance.colorList[2]
+                        );
+
+                        data[3 * i + 0] = projectedColor.R;
+                        data[3 * i + 1] = projectedColor.G;
+                        data[3 * i + 2] = projectedColor.B;
+                    }
+                }
+            else {
+                Console.WriteLine("Unsupported Pixel format!");
+            }
+            } 
+
+        UpdateTexture();
+    }
 
     private void LoadFreshImage() {
         if (ImageCommunication.Instance.image != null) {
-            if (image != null) {
-                Raylib.UnloadImage(image.Value);
+            if (baseImage != null) {
+                Raylib.UnloadImage(baseImage.Value);
             }
-            image = Raylib.ImageCopy(ImageCommunication.Instance.image.Value);
+            baseImage = Raylib.ImageCopy(ImageCommunication.Instance.image.Value);
+            if (drawnImage != null) {
+                Raylib.UnloadImage(drawnImage.Value);
+            }
+            drawnImage = Raylib.ImageCopy(baseImage.Value);
         }
         UpdateTexture();
     }
@@ -90,7 +147,7 @@ public class DisplayImageObject : UiObject {
             oldWidth = base.coordinates.width;
             oldHeight = base.coordinates.height;
         }
-        
+
         base.Resize(xPos, yPos, width, height);
         if (renderTexture != null) {
             renderTexture.Resize(
@@ -160,10 +217,14 @@ public class DisplayImageObject : UiObject {
             Raylib.UnloadTexture(this.imageTexture);
         }
 
-        if (image != null)  {
-            Raylib.UnloadImage(image.Value);
+        if (baseImage != null)  {
+            Raylib.UnloadImage(baseImage.Value);
+        }
+        if (drawnImage != null)  {
+            Raylib.UnloadImage(drawnImage.Value);
         }
 
         ImageCommunication.Instance.onUpdate -= LoadFreshImage;
+        ColorCommunication.Instance.onUpdate -= MakeNewColoredImage;
     }
 }

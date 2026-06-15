@@ -12,7 +12,7 @@ public class ColorPoint3D : Object3D {
 
     public Color color {
         get {
-            return ColorComunication.Instance.colorList[colorID];
+            return ColorCommunication.Instance.colorList[colorID];
         }
     }
 
