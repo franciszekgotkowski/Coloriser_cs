@@ -46,15 +46,19 @@ public class ColorInt {
 		Color c3
 	) {
 
+		this.R -= c1.R;
+		this.G -= c1.G;
+		this.B -= c1.B;
+
 		List<int> v1 = new List<int>() {
-			(int)c1.R - c2.R,
-			(int)c1.G - c2.G,
-			(int)c1.B - c2.B
+			(int)c2.R - c1.R,
+			(int)c2.G - c1.G,
+			(int)c2.B - c1.B
 		};
 		List<int> v2 = new List<int>() {
-			(int)c1.R - c3.R,
-			(int)c1.G - c3.G,
-			(int)c1.B - c3.B
+			(int)c3.R - c1.R,
+			(int)c3.G - c1.G,
+			(int)c3.B - c1.B
 		};
 
 		List<int> n = new List<int>() {
@@ -63,13 +67,13 @@ public class ColorInt {
 			v1[0]*v2[1] - v2[0]*v1[1]
 		};
 
-		int n_abs_sqr = n[0]*n[0] + n[1]*n[1] * n[2]*n[2];
-		int mul = (int)(R * n[0] + G * n[1] + B * n[2]);
+		double n_abs_sqr = n[0]*n[0] + n[1]*n[1] + n[2]*n[2];
+		double mul = (int)(R * n[0] + G * n[1] + B * n[2]);
 
 		List<int> n1 = new List<int>() {
-			(n[0] * mul) / n_abs_sqr,
-			(n[1] * mul) / n_abs_sqr,
-			(n[2] * mul) / n_abs_sqr
+			(int)((double)(n[0] * mul) / n_abs_sqr),
+			(int)((double)(n[1] * mul) / n_abs_sqr),
+			(int)((double)(n[2] * mul) / n_abs_sqr)
 		};
 
 		List<int> ret = new List<int>() {
@@ -86,7 +90,8 @@ public class ColorInt {
 		return new Color(
 			ret[0],
 			ret[1],
-			ret[2]
+			ret[2],
+			byte.MaxValue
 		);
 	}
 
