@@ -4,10 +4,10 @@ using Raylib_cs;
 namespace Gui;
 
 public class ColorInt {
-	public uint R;
-	public uint G;
-	public uint B;
-	public uint A;
+	public int R;
+	public int G;
+	public int B;
+	public int A;
 
 	public ColorInt(
 		Color color
@@ -19,10 +19,10 @@ public class ColorInt {
 	}
 
 	public ColorInt(
-		uint R,
-		uint G,
-		uint B,
-		uint A = byte.MaxValue
+		int R,
+		int G,
+		int B,
+		int A = byte.MaxValue
 	)
 	{
 		this.R = R;
@@ -86,6 +86,10 @@ public class ColorInt {
 			if (ret[i] < 0) ret[i] = 0;
 			if (ret[i] > byte.MaxValue) ret[i] = byte.MaxValue;
 		}
+
+		this.R += c1.R;
+		this.G += c1.G;
+		this.B += c1.B;
 
 		return new Color(
 			ret[0],

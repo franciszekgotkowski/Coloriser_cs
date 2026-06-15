@@ -28,7 +28,7 @@ public class ColorControllingObject : UiObject {
         width,
         height
     )  { }
-
+    
     private void DrawFilepathSelector() {
         UserInterface.DrawBox(
             new IntRect(
@@ -67,21 +67,42 @@ public class ColorControllingObject : UiObject {
     }
 
     private void DrawColorSliders(
-        int idx
+        int idx,
+        int y,
+        int height
     ) {
+        IntRect slider1 = new IntRect(
+            this.coordinates.x + coordinates.width * 20 / 100,
+            y,
+            this.coordinates.width * 6 / 10,
+            height*2/8
+        );
+        IntRect slider2 = new IntRect(
+            this.coordinates.x + coordinates.width * 20 / 100,
+            y + height*3/8,
+            this.coordinates.width * 6 / 10,
+            height*2/8
+        );
+        IntRect slider3 = new IntRect(
+            this.coordinates.x + coordinates.width * 20 / 100,
+            y + height*6/8,
+            this.coordinates.width * 6 / 10,
+            height*2/8
+        );
         
-    }
-
-    public override void Draw() {
-        
-        DrawFilepathSelector();
-
+        Raylib.DrawText(
+            "R",
+            this.coordinates.x + coordinates.width * 5 / 100,
+            slider1.y,
+            AppTheme.Instance.FontSize,
+            Color.Red
+        );
         R = Convert.ToByte(Raygui.GuiSlider(
             new Rectangle(
-                this.coordinates.x + this.coordinates.width*2/10,
-                this.coordinates.y+ this.coordinates.height*5/10,
-                this.coordinates.width*6/10,
-                AppTheme.Instance.FontSize *3/2
+                slider1.x,
+                slider1.y,
+                slider1.width,
+                slider1.height
             ),
             "0",
             "255",
@@ -89,12 +110,19 @@ public class ColorControllingObject : UiObject {
             0.0f,
             255.0f
         ));
+        Raylib.DrawText(
+            "G",
+            this.coordinates.x + coordinates.width * 5 / 100,
+            slider2.y,
+            AppTheme.Instance.FontSize,
+            Color.Green
+        );
         G = Convert.ToByte(Raygui.GuiSlider(
             new Rectangle(
-                this.coordinates.x + this.coordinates.width*2/10,
-                this.coordinates.y+ this.coordinates.height*6/10,
-                this.coordinates.width*6/10,
-                AppTheme.Instance.FontSize *3/2
+                slider2.x,
+                slider2.y,
+                slider2.width,
+                slider2.height
             ),
             "0",
             "255",
@@ -102,12 +130,19 @@ public class ColorControllingObject : UiObject {
             0.0f,
             255.0f
         ));
+        Raylib.DrawText(
+            "B",
+            this.coordinates.x + coordinates.width * 5 / 100,
+            slider3.y,
+            AppTheme.Instance.FontSize,
+            Color.Blue
+        );
         B = Convert.ToByte(Raygui.GuiSlider(
             new Rectangle(
-                this.coordinates.x + this.coordinates.width * 2 / 10,
-                this.coordinates.y + this.coordinates.height * 7 / 10,
-                this.coordinates.width * 6 / 10,
-                AppTheme.Instance.FontSize * 3 / 2
+                slider3.x,
+                slider3.y,
+                slider3.width,
+                slider3.height
             ),
             "0",
             "255",
@@ -117,7 +152,18 @@ public class ColorControllingObject : UiObject {
         ));
 
 
-        ColorCommunication.Instance.SetColor(0, new Color(R, G, B, Byte.MaxValue));
-        EdgesComunication.Instance.SetEgde(0, new Color(R, G, B, Byte.MaxValue));
+        ColorCommunication.Instance.SetColor(idx, new Color(R, G, B, Byte.MaxValue));
+        EdgesComunication.Instance.SetEgde(idx, new Color(R, G, B, Byte.MaxValue));
+    }
+
+    public override void Draw() {
+        
+        DrawFilepathSelector();
+        DrawColorSliders(
+            0,
+            this.coordinates.y + this.coordinates.height *4/10,
+            this.coordinates.height * 2/10
+        );
+
     }
 }

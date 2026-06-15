@@ -78,9 +78,9 @@ public class DisplayImageObject : UiObject {
                 for (int i = 0; i < drawnImage.Value.Width * drawnImage.Value.Height; i++) {
 
                     ColorInt currentColor = new ColorInt(
-                        (uint)data[4 * i] + 0,
-                        (uint)data[4 * i] + 1,
-                        (uint)data[4 * i] + 2
+                        (int)data[4 * i] + 0,
+                        (int)data[4 * i] + 1,
+                        (int)data[4 * i] + 2
                     );
 
                     Color projectedColor = currentColor.Project(
@@ -98,9 +98,9 @@ public class DisplayImageObject : UiObject {
                     for (int i = 0; i < drawnImage.Value.Width * drawnImage.Value.Height; i++) {
 
                         ColorInt currentColor = new ColorInt(
-                            (uint)data[3 * i] + 0,
-                            (uint)data[3 * i] + 1,
-                            (uint)data[3 * i] + 2
+                            (int)data[3 * i] + 0,
+                            (int)data[3 * i] + 1,
+                            (int)data[3 * i] + 2
                         );
 
                         Color projectedColor = currentColor.Project(
