@@ -66,6 +66,34 @@ public class ColorControllingObject : UiObject {
         
     }
 
+    private bool lastToggleState = true;
+    bool toggleState = true;
+    private void DrawSeeDefaultImageButton(
+        IntRect intRect
+    ) {
+        toggleState = Raygui.GuiCheckBox(
+            new Rectangle(
+                intRect.x,
+                intRect.y,
+                intRect.width,
+                intRect.height
+            ),
+            "",
+            lastToggleState
+        );
+        
+        if (toggleState && !lastToggleState) {
+            ImageCommunication.Instance.TriggerImageChange(WhichImageToDraw.coloredImage);
+            Console.WriteLine("Clicked");
+        }
+        if (!toggleState && lastToggleState ) {
+            ImageCommunication.Instance.TriggerImageChange(WhichImageToDraw.baseImage);
+            Console.WriteLine("Unclicked");
+        }
+        
+        lastToggleState = toggleState;
+    }
+
     private void DrawColorSliders(
         int idx,
         int y,
@@ -156,6 +184,37 @@ public class ColorControllingObject : UiObject {
         EdgesComunication.Instance.SetEgde(idx, new Color(R, G, B, Byte.MaxValue));
     }
 
+    private void DrawSaveImageButton(
+        IntRect intRect
+    ) {
+
+        Rectangle rect = new Rectangle(
+            intRect.x,
+            intRect.y,
+            intRect.width,
+            intRect.height
+        );
+        
+        if (ImageCommunication.Instance.image == null) {
+            Raygui.GuiDisable();
+            Raygui.GuiButton(rect, "");
+            Raygui.GuiEnable();
+        }
+        else {
+            string newFileWithPath = FilePathMethods.NewFileWithPath(ImageCommunication.Instance.FilePath);
+            string newFileWithoutPath = FilePathMethods.NewFileWithoutPath(ImageCommunication.Instance.FilePath);
+            
+            int pressed = Raygui.GuiButton(
+                rect,
+                newFileWithoutPath
+            );
+            if (pressed != 0) {
+                ImageCommunication.Instance.TriggerSaveImage(newFileWithPath);
+            }
+        }
+        
+    }
+
     public override void Draw() {
         
         DrawFilepathSelector();
@@ -163,6 +222,22 @@ public class ColorControllingObject : UiObject {
             0,
             this.coordinates.y + this.coordinates.height *4/10,
             this.coordinates.height * 2/10
+        );
+        DrawSeeDefaultImageButton(
+            new IntRect(
+                coordinates.x + AppTheme.Instance.BorderSize,
+                coordinates.y + coordinates.height -  AppTheme.Instance.FontSize*2,
+                AppTheme.Instance.FontSize*2,
+                AppTheme.Instance.FontSize*2
+            )
+        );
+        DrawSaveImageButton(
+            new IntRect(
+                coordinates.x + AppTheme.Instance.BorderSize * 2 + AppTheme.Instance.FontSize*2,
+                coordinates.y + coordinates.height -  AppTheme.Instance.FontSize*2,
+                coordinates.width - AppTheme.Instance.BorderSize*3 - AppTheme.Instance.FontSize*2,
+                AppTheme.Instance.FontSize*2
+            )
         );
 
     }

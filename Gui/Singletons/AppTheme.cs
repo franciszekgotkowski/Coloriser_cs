@@ -72,7 +72,8 @@ public class AppTheme {
         Raygui.GuiSetStyle(Raygui.DEFAULT, Raygui.BORDER_COLOR_PRESSED, AppTheme.Instance.Theme.clickedBorderColor.ToUint());
         Raygui.GuiSetStyle(Raygui.DEFAULT, Raygui.BASE_COLOR_PRESSED, AppTheme.Instance.Theme.clickedFillInColor.ToUint());
         Raygui.GuiSetStyle(Raygui.DEFAULT, Raygui.TEXT_COLOR_PRESSED, AppTheme.Instance.Theme.clickedTextColor.ToUint());
-
+        
+        Raygui.GuiSetStyle((int)GuiControl.DEFAULT, (int)GuiControlProperty.BORDER_WIDTH, (uint)this.BorderSize/2);
 
         // GuiSetStyle(DEFAULT, BORDER_COLOR_DISABLED, ColorToInt(cs.border));
         // GuiSetStyle(DEFAULT, BASE_COLOR_DISABLED,   ColorToInt(cs.background));

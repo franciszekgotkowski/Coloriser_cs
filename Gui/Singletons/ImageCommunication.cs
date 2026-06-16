@@ -6,12 +6,14 @@ namespace Gui;
 
 public class ImageCommunication
 {
-
     private ImageCommunication() { }
 
     public static ImageCommunication Instance = new ImageCommunication();
 
     public event DisplayImageEvent onUpdate;
+    public event ChangeDisplayedImage changeDisplayedImage;
+
+    public event SaveImage SaveImageToDisk;
 
     private string _FilePath;
     public string FilePath {
@@ -30,8 +32,16 @@ public class ImageCommunication
             }
 
             onUpdate?.Invoke();
-
+            Console.WriteLine(FilePathMethods.NewFileWithPath(_FilePath));
         }
+    }
+
+    public void TriggerImageChange(WhichImageToDraw whichImageToDraw) {
+        this.changeDisplayedImage?.Invoke(whichImageToDraw);
+    }
+
+    public void TriggerSaveImage(string path) {
+        this.SaveImageToDisk?.Invoke(path);
     }
 
     public Image? image;

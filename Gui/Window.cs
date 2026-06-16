@@ -126,6 +126,14 @@ public class Window {
             if (Raylib.IsKeyPressed(KeyboardKey.M)) {
                 ImageCommunication.Instance.FilePath = Path.Combine(home, "images.jpeg");
             }
+            
+            if (Raylib.IsKeyPressed(KeyboardKey.B)) {
+                ImageCommunication.Instance.TriggerImageChange(WhichImageToDraw.baseImage);
+            }
+            if (Raylib.IsKeyPressed(KeyboardKey.N)) {
+                ImageCommunication.Instance.TriggerImageChange(WhichImageToDraw.coloredImage);
+            }
+            
             // if (Raylib.IsKeyPressed(KeyboardKey.X)) {
             //     ImageCommunication.Instance.FilePath = "";
             // }
