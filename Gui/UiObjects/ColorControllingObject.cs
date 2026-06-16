@@ -7,9 +7,13 @@ namespace Gui;
 public delegate void NewColorEvent();
 
 public class ColorControllingObject : UiObject {
-    byte R = 125;
-    byte G = 125;
-    byte B = 125;
+    // byte R = 125;
+    // byte G = 125;
+    // byte B = 125;
+
+    ColorInt c0  = new ColorInt(Color.Gold);
+    ColorInt c1  = new ColorInt(Color.Beige);
+    ColorInt c2  = new ColorInt(Color.Maroon);
 
     private string lastPath;
     private string text = "";
@@ -29,14 +33,11 @@ public class ColorControllingObject : UiObject {
         height
     )  { }
     
-    private void DrawFilepathSelector() {
+    private void DrawFilepathSelector(
+            IntRect rect
+            ) {
         UserInterface.DrawBox(
-            new IntRect(
-                this.coordinates.x + AppTheme.Instance.FontSize/4,
-                this.coordinates.y + AppTheme.Instance.FontSize/4,
-                this.coordinates.width - AppTheme.Instance.FontSize/2,
-                AppTheme.Instance.FontSize * 4
-            )
+                rect
         );
         
         Raylib.DrawText(
@@ -97,7 +98,8 @@ public class ColorControllingObject : UiObject {
     private void DrawColorSliders(
         int idx,
         int y,
-        int height
+        int height,
+        ColorInt colorInt
     ) {
         IntRect slider1 = new IntRect(
             this.coordinates.x + coordinates.width * 20 / 100,
@@ -125,7 +127,7 @@ public class ColorControllingObject : UiObject {
             AppTheme.Instance.FontSize,
             Color.Red
         );
-        R = Convert.ToByte(Raygui.GuiSlider(
+        colorInt.R = Convert.ToByte(Raygui.GuiSlider(
             new Rectangle(
                 slider1.x,
                 slider1.y,
@@ -134,7 +136,7 @@ public class ColorControllingObject : UiObject {
             ),
             "0",
             "255",
-            R,
+            colorInt.R,
             0.0f,
             255.0f
         ));
@@ -145,7 +147,7 @@ public class ColorControllingObject : UiObject {
             AppTheme.Instance.FontSize,
             Color.Green
         );
-        G = Convert.ToByte(Raygui.GuiSlider(
+        colorInt.G = Convert.ToByte(Raygui.GuiSlider(
             new Rectangle(
                 slider2.x,
                 slider2.y,
@@ -154,7 +156,7 @@ public class ColorControllingObject : UiObject {
             ),
             "0",
             "255",
-            G,
+            colorInt.G,
             0.0f,
             255.0f
         ));
@@ -165,7 +167,7 @@ public class ColorControllingObject : UiObject {
             AppTheme.Instance.FontSize,
             Color.Blue
         );
-        B = Convert.ToByte(Raygui.GuiSlider(
+        colorInt.B = Convert.ToByte(Raygui.GuiSlider(
             new Rectangle(
                 slider3.x,
                 slider3.y,
@@ -174,14 +176,14 @@ public class ColorControllingObject : UiObject {
             ),
             "0",
             "255",
-            B,
+            colorInt.B,
             0.0f,
             255.0f
         ));
 
 
-        ColorCommunication.Instance.SetColor(idx, new Color(R, G, B, Byte.MaxValue));
-        EdgesComunication.Instance.SetEgde(idx, new Color(R, G, B, Byte.MaxValue));
+        ColorCommunication.Instance.SetColor(idx, new Color(colorInt.R, colorInt.G, colorInt.B, Byte.MaxValue));
+        EdgesComunication.Instance.SetEgde(idx, new Color(colorInt.R, colorInt.G, colorInt.B, Byte.MaxValue));
     }
 
     private void DrawSaveImageButton(
@@ -215,30 +217,80 @@ public class ColorControllingObject : UiObject {
         
     }
 
-    public override void Draw() {
-        
-        DrawFilepathSelector();
+    public void DrawAllSliders (
+        IntRect intRect
+    ) {
+
+        Raylib.DrawRectangle(
+                intRect.x,
+                intRect.y,
+                intRect.width,
+                intRect.height,
+                Color.Red
+                );
+
+        int slidersHeight = (intRect.height - 2 * AppTheme.Instance.FontSize)/3;
+
         DrawColorSliders(
-            0,
-            this.coordinates.y + this.coordinates.height *4/10,
-            this.coordinates.height * 2/10
-        );
+                0,
+                intRect.y,
+                slidersHeight,
+                c0
+                );
+
+        DrawColorSliders(
+                1,
+                intRect.y + slidersHeight + AppTheme.Instance.FontSize,
+                slidersHeight,
+                c1
+                );
+
+        DrawColorSliders(
+                2,
+                intRect.y + 2 *slidersHeight + 2 * AppTheme.Instance.FontSize,
+                slidersHeight,
+                c2
+                );
+
+
+    }
+
+    public override void Draw() {
+
+        DrawFilepathSelector(
+                new IntRect(
+                    this.coordinates.x + AppTheme.Instance.FontSize/4,
+                    this.coordinates.y + AppTheme.Instance.FontSize/4,
+                    this.coordinates.width - AppTheme.Instance.FontSize/2,
+                    AppTheme.Instance.FontSize * 4
+                    )
+                );
+
+        DrawAllSliders(
+                new IntRect(
+                        this.coordinates.x + AppTheme.Instance.FontSize/4,
+                        this.coordinates.y + AppTheme.Instance.FontSize/4 + AppTheme.Instance.FontSize * 5,
+                        this.coordinates.width - AppTheme.Instance.FontSize/2,
+                        this.coordinates.height - (this.coordinates.y + AppTheme.Instance.FontSize/4 + AppTheme.Instance.FontSize * 7)
+                    )
+                );
+
         DrawSeeDefaultImageButton(
-            new IntRect(
-                coordinates.x + AppTheme.Instance.BorderSize,
-                coordinates.y + coordinates.height -  AppTheme.Instance.FontSize*2,
-                AppTheme.Instance.FontSize*2,
-                AppTheme.Instance.FontSize*2
-            )
-        );
+                new IntRect(
+                    coordinates.x + AppTheme.Instance.BorderSize,
+                    coordinates.y + coordinates.height -  AppTheme.Instance.FontSize*2,
+                    AppTheme.Instance.FontSize*2,
+                    AppTheme.Instance.FontSize*2
+                    )
+                );
         DrawSaveImageButton(
-            new IntRect(
-                coordinates.x + AppTheme.Instance.BorderSize * 2 + AppTheme.Instance.FontSize*2,
-                coordinates.y + coordinates.height -  AppTheme.Instance.FontSize*2,
-                coordinates.width - AppTheme.Instance.BorderSize*3 - AppTheme.Instance.FontSize*2,
-                AppTheme.Instance.FontSize*2
-            )
-        );
+                new IntRect(
+                    coordinates.x + AppTheme.Instance.BorderSize * 2 + AppTheme.Instance.FontSize*2,
+                    coordinates.y + coordinates.height -  AppTheme.Instance.FontSize*2,
+                    coordinates.width - AppTheme.Instance.BorderSize*3 - AppTheme.Instance.FontSize*2,
+                    AppTheme.Instance.FontSize*2
+                    )
+                );
 
     }
 }
