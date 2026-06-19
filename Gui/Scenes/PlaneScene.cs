@@ -93,9 +93,9 @@ public class PlaneScene : Scene3D {
             matrix.Transpose();
             matrix.Solve(vector_cd);
 
-            if (
-                !matrix.IsDiagonalInconsistent(vector_cd)
-            ) {
+            // if (
+            //     !matrix.IsDiagonalInconsistent(vector_cd)
+            // ) {
                 float a, b, n;
                 a = (float)vector_cd[0] / matrix.data[0][0];
                 b = (float)vector_cd[1] / matrix.data[1][1];
@@ -112,8 +112,12 @@ public class PlaneScene : Scene3D {
                     B >= 0 && B <= byte.MaxValue
                 ) {
                     colors.Add(new Color(R, G, B));
-                }
             }
+            // }
+            // else
+            // {
+            //     Console.WriteLine("Macież sprzeczna");
+            // }
 
         }
         Raylib.BeginMode3D(camera.camera);
@@ -135,6 +139,11 @@ public class PlaneScene : Scene3D {
                 orderedPoints[to].ToCubePosition(cube),
                 AppTheme.Instance.Theme.borderColor
             );
+            Raylib.DrawSphere(
+                orderedPoints[from].ToCubePosition(cube),
+                0.05f,
+                AppTheme.Instance.Theme.borderColor
+                );
         }
 
         List<List<Color>> triangles = CubeEdgesData.CreateTrianglesFromOrderedPoints(orderedPoints);

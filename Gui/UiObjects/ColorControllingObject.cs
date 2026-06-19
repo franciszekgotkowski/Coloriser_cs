@@ -221,13 +221,13 @@ public class ColorControllingObject : UiObject {
         IntRect intRect
     ) {
 
-        Raylib.DrawRectangle(
-                intRect.x,
-                intRect.y,
-                intRect.width,
-                intRect.height,
-                Color.Red
-                );
+        // Raylib.DrawRectangle(
+        //         intRect.x,
+        //         intRect.y,
+        //         intRect.width,
+        //         intRect.height,
+        //         Color.Red
+        //         );
 
         int slidersHeight = (intRect.height - 2 * AppTheme.Instance.FontSize)/3;
 
