@@ -129,7 +129,7 @@ public class PlaneScene : Scene3D {
         //     );
         // }
 
-        List<Color> orderedPoints = CubeEdgesData.OrderColorsIntoRing(colors);
+        List<Color> orderedPoints = CubeEdgesData.OrderColorsIntoRing(colors, vector_u, vector_v);
         for (int i = 0; i < orderedPoints.Count; i++) {
             int from = i % orderedPoints.Count;
             int to = (i + 1) % orderedPoints.Count;
@@ -139,11 +139,11 @@ public class PlaneScene : Scene3D {
                 orderedPoints[to].ToCubePosition(cube),
                 AppTheme.Instance.Theme.borderColor
             );
-            Raylib.DrawSphere(
-                orderedPoints[from].ToCubePosition(cube),
-                0.05f,
-                AppTheme.Instance.Theme.borderColor
-                );
+            // Raylib.DrawSphere(
+            //     orderedPoints[from].ToCubePosition(cube),
+            //     0.05f,
+            //     AppTheme.Instance.Theme.borderColor
+            //     );
         }
 
         List<List<Color>> triangles = CubeEdgesData.CreateTrianglesFromOrderedPoints(orderedPoints);

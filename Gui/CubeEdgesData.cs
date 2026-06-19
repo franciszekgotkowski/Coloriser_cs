@@ -1,3 +1,4 @@
+using System.Numerics;
 using Raylib_cs;
 namespace Gui;
 
@@ -38,38 +39,54 @@ public static class CubeEdgesData
         new List<int>() { 0, 0, -1 },
     };
     public static List<Color> OrderColorsIntoRing(
-        List<Color> list
+        List<Color> list,
+        List<int> planeVectorU,
+        List<int> planeVectorV
     ) {
-        if (list.Count < 2) {
-            throw new ArgumentException();
+        // The plane-cube intersection is a convex polygon whose vertices are
+        // `list`. Greedy nearest-neighbour ordering does not trace the
+        // perimeter of a convex polygon (the closest vertex is often the one
+        // across the polygon, not the adjacent one), which produces a
+        // self-crossing ring. Instead we sort the vertices by their angle
+        // around the centroid, measured inside the plane.
+        if (list.Count < 3) {
+            return new List<Color>(list);
         }
-        List<Color> output = new List<Color>();
-        
-        List<Color> list_cp = new List<Color>();
+
+        Vector3 normal = Vector3.Cross(
+            new Vector3(planeVectorU[0], planeVectorU[1], planeVectorU[2]),
+            new Vector3(planeVectorV[0], planeVectorV[1], planeVectorV[2])
+        );
+
+        Vector3 centroid = Vector3.Zero;
         foreach (Color c in list) {
-            list_cp.Add(c);
+            centroid += c.ToVector3();
         }
+        centroid /= list.Count;
 
-        output.Add(list_cp[0]);
-        list_cp.RemoveAt(0);
-
-        while (list_cp.Count > 0) {
-            List<double> distances = new List<double>();
-            foreach (Color c in list_cp) {
-                distances.Add(ColorExtensions.Distance(c, output[output.Count-1]));
+        // First in-plane axis: direction to the vertex farthest from the
+        // centroid (numerically stable, never a near-zero vector).
+        Vector3 axisU = Vector3.Zero;
+        float bestLengthSqr = -1.0f;
+        foreach (Color c in list) {
+            Vector3 d = c.ToVector3() - centroid;
+            if (d.LengthSquared() > bestLengthSqr) {
+                bestLengthSqr = d.LengthSquared();
+                axisU = d;
             }
-
-            double currentDistance = 10000.0f;
-            int colorIdx = 0;
-            for (int i = 0; i < distances.Count; i++) {
-                if (distances[i] < currentDistance) {
-                    colorIdx = i;
-                    currentDistance = distances[i];
-                }
-            }
-            output.Add(list_cp[colorIdx]);
-            list_cp.RemoveAt(colorIdx);
         }
+        axisU = Vector3.Normalize(axisU);
+        // Second in-plane axis, orthogonal to the first.
+        Vector3 axisW = Vector3.Normalize(Vector3.Cross(normal, axisU));
+
+        List<Color> output = new List<Color>(list);
+        output.Sort((a, b) => {
+            Vector3 da = a.ToVector3() - centroid;
+            Vector3 db = b.ToVector3() - centroid;
+            double angleA = Math.Atan2(Vector3.Dot(da, axisW), Vector3.Dot(da, axisU));
+            double angleB = Math.Atan2(Vector3.Dot(db, axisW), Vector3.Dot(db, axisU));
+            return angleA.CompareTo(angleB);
+        });
 
         return output;
     }
